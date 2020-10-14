@@ -93,7 +93,7 @@ else:
 
 # --- IDが存在しない場合はファイルを出さずに終了する
 if len(IDs) < 1:
-	input('\nコモンズ＆静画素材が見つかりませんでした。Enterで終了します: ')
+	input('\nニコニコ素材が見つかりませんでした。Enterで終了します: ')
 	sys.exit(0)
 
 # --- IDリストをテキストファイルに出力
@@ -102,7 +102,7 @@ with open(os.path.dirname(filename)+'\\Ids.txt', mode='w', encoding='sjis') as f
 print('')
 
 # --- CSVを生成するか確認
-confirm = input('オンラインでタイトルと作者を取得しますか？結果はCSV形式で保存されます[y/N] ').strip()
+confirm = input('オンラインでタイトルと作者を取得しますか？結果はCSV形式で保存されます[y/N(Enter)] ').strip()
 if not confirm == 'y' and not confirm == 'Y':
 	sys.exit(0)
 
