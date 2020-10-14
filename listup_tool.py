@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 from pprint import pprint
 
 # --- タイトルを描画
-print('------ 「ニコニコ素材リストアップツール v0.4」 by @is_ptcm ------\n')
+print('------ 「ニコニコ素材リストアップツール v0.5」 by @is_ptcm ------\n')
 
 # --- 読み出すaupファイルをコマンドライン引数より取得
 if len(sys.argv) < 2:
@@ -47,7 +47,7 @@ if ext == '.ccproj':
 	print('ファイルを読み込めました。')
 	# 検索
 	for item in ccproj['file-items']:
-		search_result = re.search('/((nc|im|sm)\d{1,12})[\._-]', item['apath'])
+		search_result = re.search('((nc|im|sm)\d{1,12})', item['apath'])
 		if not search_result == None:
 			IDs.append(search_result.groups()[0])
 	IDs    = list(set(IDs))
@@ -74,7 +74,7 @@ else:
 		sys.exit(1)
 	print('ファイルを読み込めました。')
 	# 検索
-	IDs    = re.findall(b'[/\\\\]((nc|im|sm)\\d{1,12})[\._-]', aup)
+	IDs    = re.findall(b'((nc|im|sm)\\d{1,12})', aup)
 	IDs    = list(set(IDs))
 	length = len(IDs)
 	for i in range(length):
