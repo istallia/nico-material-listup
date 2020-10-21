@@ -17,7 +17,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 # --- タイトルを描画
-print('------ 「ニコニコ素材リストアップツール v0.5」 by @is_ptcm ------\n')
+print('------ 「ニコニコ素材リストアップツール v0.5.1」 by @is_ptcm ------\n')
 
 # --- 読み出すaupファイルをコマンドライン引数より取得
 if len(sys.argv) < 2:
@@ -208,7 +208,7 @@ csv_text = csv_text.replace(chr(0xffe1), chr(0x00a3))
 csv_text = csv_text.replace(chr(0xffe2), chr(0x00ac))
 csv_text = csv_text.replace(chr(0x2015), chr(0x2014))
 csv_text = csv_text.replace(chr(0x2225), chr(0x2225))
-with open(os.path.dirname(filename)+'\\Ids.csv', mode='w', encoding='sjis') as f:
+with open(os.path.dirname(filename)+'\\Ids.csv', mode='w', encoding='cp932') as f:
 	f.write(csv_text)
 
 # --- 終了待ち
