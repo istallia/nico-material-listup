@@ -73,7 +73,7 @@ else:
 		sys.exit(1)
 	print('ファイルを読み込めました。')
 	# 検索
-	IDs    = re.findall(b'((nc|im|sm)\\d{1,12})', aup)
+	IDs    = re.findall(b'[^a-zA-Z]((nc|im|sm)\\d{1,12})', aup)
 	IDs    = list(set(IDs))
 	length = len(IDs)
 	for i in range(length):
