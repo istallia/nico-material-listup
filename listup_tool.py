@@ -201,13 +201,13 @@ csv_text = ''
 for i in range(length):
 	csv_text = csv_text + IDs[i] + ', ' + titles[i].replace(',','，') + ',' + creators[i].replace(',','，') + '\n'
 csv_text = csv_text[0:-1]
-csv_text = csv_text.replace(chr(0xff5e), chr(0x301c))
-csv_text = csv_text.replace(chr(0xff0d), chr(0x2212))
-csv_text = csv_text.replace(chr(0xffe0), chr(0x00a2))
-csv_text = csv_text.replace(chr(0xffe1), chr(0x00a3))
-csv_text = csv_text.replace(chr(0xffe2), chr(0x00ac))
-csv_text = csv_text.replace(chr(0x2015), chr(0x2014))
-csv_text = csv_text.replace(chr(0x2225), chr(0x2225))
+# csv_text = csv_text.replace(chr(0xff5e), chr(0x301c))
+# csv_text = csv_text.replace(chr(0xff0d), chr(0x2212))
+# csv_text = csv_text.replace(chr(0xffe0), chr(0x00a2))
+# csv_text = csv_text.replace(chr(0xffe1), chr(0x00a3))
+# csv_text = csv_text.replace(chr(0xffe2), chr(0x00ac))
+# csv_text = csv_text.replace(chr(0x2015), chr(0x2014))
+# csv_text = csv_text.replace(chr(0x2225), chr(0x2225))
 with open(os.path.dirname(filename)+'\\Ids.csv', mode='w', encoding='cp932') as f:
 	f.write(csv_text)
 
