@@ -17,7 +17,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 # --- タイトルを描画
-print('------ 「ニコニコ素材リストアップツール v0.5.1」 by @is_ptcm ------\n')
+print('------ 「ニコニコ素材リストアップツール」v0.5.2 by @is_ptcm ------\n')
 
 # --- 読み出すaupファイルをコマンドライン引数より取得
 if len(sys.argv) < 2:
