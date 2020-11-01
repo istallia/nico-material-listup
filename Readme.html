@@ -1055,8 +1055,8 @@ body .markdown-body
 .codehilite .vi{color:teal}
 .codehilite .il{color:#009999}
 .codehilite .gc{color:#999;background-color:#EAF2F5}
-</style><title>Readme</title></head><body><article class="markdown-body"><h1 id="v05">ニコニコ素材リストアップツール v0.5<a class="headerlink" href="#v05" title="Permanent link"></a></h1>
-<p>(2020-10-14)</p>
+</style><title>Readme</title></head><body><article class="markdown-body"><h1 id="v053">ニコニコ素材リストアップツール v0.5.3<a class="headerlink" href="#v053" title="Permanent link"></a></h1>
+<p>(2020-11-01)</p>
 <h2 id="_1">概要<a class="headerlink" href="#_1" title="Permanent link"></a></h2>
 <p>動画編集ソフトのプロジェクトファイルからニコニコの素材のIDを抽出し、コンテンツツリーに登録しやすい10件ごとのリストにまとめるツールです。<br />
 元々はAviUtlとRecotteStudio用でしたが、仕組み的にどのソフトでもいけそうだったので内部でやってた制限を取っ払いました。<br />
@@ -1073,7 +1073,7 @@ IDの抽出が成功するとタイトルと作者を取得するか聞かれる
 動画編集ソフトのプロジェクトファイルを想定していますが、制限撤廃によりどんな種類のファイルにでも使用できるようになりました。<br />
 本ツールで出力されたテキストファイルやCSVファイルを読み込んでも正常に検出できました(何の意味もないけど)</p>
 <h2 id="_3">対象となるファイル<a class="headerlink" href="#_3" title="Permanent link"></a></h2>
-<p>素材はファイル名に素材IDを含む必要があります。<br />
+<p>素材はファイル名に素材IDを含む必要があります。sm、im、ncの後に数字が2桁以上続くものが対象です。<br />
 例えば、素材を以下のような名前で保存していれば使えます。</p>
 <ul>
 <li>nc12345678.wav</li>
@@ -1082,6 +1082,8 @@ IDの抽出が成功するとタイトルと作者を取得するか聞かれる
 <li>【福袋】素材音声詰め合わせ[sm12345678].mp4</li>
 <li>【nc12345678】超イカしたサウンド.wav</li>
 </ul>
+<p>※ v0.5からのアップデートでいろいろ試みてはいますが、ID周辺のバイナリによっては誤検知したり、検出漏れが発生する可能性があります。<br />
+その場合は不具合のあったファイルor誤検知したIDの周辺のバイナリ情報(バイナリエディタのスクショ)をTwitterのDMなどに送ってくれれば対応します。</p>
 <h2 id="_4">注意<a class="headerlink" href="#_4" title="Permanent link"></a></h2>
 <ul>
 <li>本ツールはニコニ・コモンズのWebサイトへアクセスします。多重起動するなど、むやみに負荷をかける行為はしないでください。</li>
