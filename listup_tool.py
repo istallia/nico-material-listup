@@ -145,8 +145,8 @@ for material_id in IDs:
 				html      = urlopen('https://seiga.nicovideo.jp/seiga/'+material_id).read()
 				soup      = BeautifulSoup(html, 'html.parser')
 				p_title   = soup.select_one('title').text.split()
-				m_title   = p_title[0]
-				m_creator = p_title[2]
+				m_title   = p_title[0] # soup.select_one('div.lg_ttl_illust > h1')から取得
+				m_creator = p_title[2] # soup.select_one('strong')から取得
 				print(' -> '+m_title+', '+m_creator)
 				titles.append(m_title)
 				creators.append(m_creator)
@@ -175,6 +175,36 @@ for material_id in IDs:
 				m_title   = soup.select_one('meta[name="twitter:title"]')['content']
 				m_creator = json.loads(soup.select_one('script[type="application/ld+json"]').string)
 				m_creator = m_creator['author']['name']
+				print(' -> '+m_title+', '+m_creator)
+				titles.append(m_title)
+				creators.append(m_creator)
+				retry_count = -1
+			except urllib.error.HTTPError as e:
+				print('\nエラーコード: ', end='')
+				print(e.code)
+				titles.append('(取得に失敗)')
+				creators.append('(取得に失敗)')
+				retry_count = -1
+			except IndexError:
+				retry_count += 1
+				if retry_count >= 4:
+					print('\nIDの取得に失敗。ニコニコ動画に障害が発生しているか、素材が削除された可能性があります。')
+					titles.append('(取得に失敗)')
+					creators.append('(取得に失敗)')
+				else:
+					print('\nIDの取得に失敗。再試行します...')
+			time.sleep(0.3)
+	elif material_id[:2] == 'td':
+		while retry_count >= 0 and retry_count < 4:
+			try:
+				print('タイトルと作者を取得: '+material_id, end='')
+				# html      = urlopen('https://www.nicovideo.jp/watch/'+material_id).read()
+				# soup      = BeautifulSoup(html, 'html.parser')
+				# 作者は soup.select_one('name.work-author-name')から取得
+				# タイトルは soup.select_one('h1.work-info-title')から取得
+				# m_title   = soup.select_one('meta[name="twitter:title"]')['content']
+				# m_creator = json.loads(soup.select_one('script[type="application/ld+json"]').string)
+				# m_creator = m_creator['author']['name']
 				print(' -> '+m_title+', '+m_creator)
 				titles.append(m_title)
 				creators.append(m_creator)
