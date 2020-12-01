@@ -144,6 +144,7 @@ IDs.*
 *.zip
 on.bat
 off.bat
+*.exe
 
 # 旧環境
 ltenv/
