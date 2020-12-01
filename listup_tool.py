@@ -17,7 +17,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 # --- タイトルを描画
-print('------ 「ニコニコ素材リストアップツール」v0.5.3 by @is_ptcm ------\n')
+print('------ 「ニコニコ素材リストアップツール」v0.6.0 by @is_ptcm ------\n')
 
 # --- 読み出すaupファイルをコマンドライン引数より取得
 if len(sys.argv) < 2:
@@ -144,9 +144,8 @@ for material_id in IDs:
 				print('タイトルと作者を取得: '+material_id, end='')
 				html      = urlopen('https://seiga.nicovideo.jp/seiga/'+material_id).read()
 				soup      = BeautifulSoup(html, 'html.parser')
-				p_title   = soup.select_one('title').text.split()
-				m_title   = p_title[0] # soup.select_one('div.lg_ttl_illust > h1')から取得
-				m_creator = p_title[2] # soup.select_one('strong')から取得
+				m_title   = soup.select_one('div.lg_ttl_illust > h1').text
+				m_creator = soup.select_one('strong').text
 				print(' -> '+m_title+', '+m_creator)
 				titles.append(m_title)
 				creators.append(m_creator)
@@ -198,13 +197,10 @@ for material_id in IDs:
 		while retry_count >= 0 and retry_count < 4:
 			try:
 				print('タイトルと作者を取得: '+material_id, end='')
-				# html      = urlopen('https://www.nicovideo.jp/watch/'+material_id).read()
-				# soup      = BeautifulSoup(html, 'html.parser')
-				# 作者は soup.select_one('name.work-author-name')から取得
-				# タイトルは soup.select_one('h1.work-info-title')から取得
-				# m_title   = soup.select_one('meta[name="twitter:title"]')['content']
-				# m_creator = json.loads(soup.select_one('script[type="application/ld+json"]').string)
-				# m_creator = m_creator['author']['name']
+				html      = urlopen('https://3d.nicovideo.jp/works/'+material_id).read()
+				soup      = BeautifulSoup(html, 'html.parser')
+				m_title   = soup.select_one('name.work-author-name').text
+				m_creator = soup.select_one('h1.work-info-title').text
 				print(' -> '+m_title+', '+m_creator)
 				titles.append(m_title)
 				creators.append(m_creator)
@@ -218,7 +214,7 @@ for material_id in IDs:
 			except IndexError:
 				retry_count += 1
 				if retry_count >= 4:
-					print('\nIDの取得に失敗。ニコニコ動画に障害が発生しているか、素材が削除された可能性があります。')
+					print('\nIDの取得に失敗。ニコニ立体に障害が発生しているか、素材が削除された可能性があります。')
 					titles.append('(取得に失敗)')
 					creators.append('(取得に失敗)')
 				else:
