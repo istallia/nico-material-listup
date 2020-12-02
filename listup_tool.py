@@ -68,7 +68,7 @@ def getIdsList(filename):
 			return
 		print('ファイルを読み込めました。')
 		# 検索
-		IDs    = re.findall(b'[^a-zA-Z0-9]*((nc|im|sm|td)\\d{2,12})[^a-zA-Z0-9]', aup)
+		IDs    = re.findall(b'(?:^|[^a-zA-Z0-9])((nc|im|sm|td)\\d{2,12})[^a-zA-Z0-9]', aup)
 		IDs    = list(set(IDs))
 		length = len(IDs)
 		for i in range(length):
