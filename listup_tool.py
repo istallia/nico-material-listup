@@ -1,5 +1,5 @@
 #!python3
-#coding:utf-8
+#-*- coding: utf-8 -*-
 
 # 「ニコニコ素材リストアップツール」by @is_ptcm
 #
@@ -29,9 +29,10 @@ else:
 filename = os.path.abspath(filename)
 
 # --- 変数の用意
-IDs      = []
-length   = 0
-IDs_list = ''
+exclude_ext_list = ['lwi', 'avi', 'mp4', 'flv', 'mov', 'asf', 'mkv', 'webm', 'mpg', 'm2ts', 'mpg', 'mpeg', 'wav', 'mp3', 'ogg', 'wma', 'm4a', 'flac', 'aif', 'aiff', 'aac', 'mid', 'midi', 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'ico', 'zip', 'lzh', '7z', 'gz', 'tar', 'exe', 'dll']
+IDs              = []
+length           = 0
+IDs_list         = ''
 
 # --- IDリストをファイルから取得する関数
 def getIdsList(filename):
@@ -78,7 +79,8 @@ def getIdsList(filename):
 if os.path.isdir(filename):
 	name_list = glob.glob(filename+'/**', recursive=True)
 	for name in name_list:
-		if os.path.isfile(name):
+		file_title, ext = os.path.splitext(name);
+		if os.path.isfile(name) and not ext[1:] in exclude_ext_list:
 			IDs.extend(getIdsList(name))
 elif os.path.isfile(filename):
 	IDs = getIdsList(filename)
@@ -240,7 +242,7 @@ csv_text = csv_text[0:-1]
 # csv_text = csv_text.replace(chr(0xffe2), chr(0x00ac))
 # csv_text = csv_text.replace(chr(0x2015), chr(0x2014))
 # csv_text = csv_text.replace(chr(0x2225), chr(0x2225))
-with open(os.path.dirname(filename)+'\\Ids.csv', mode='w', encoding='cp932') as f:
+with open(os.path.dirname(filename)+'\\Ids.csv', mode='w', encoding='cp932', errors="ignore") as f:
 	f.write(csv_text)
 
 # --- 終了待ち
