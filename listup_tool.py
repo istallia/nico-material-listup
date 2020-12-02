@@ -173,8 +173,8 @@ for material_id in IDs:
 				print('タイトルと作者を取得: '+material_id, end='')
 				html      = urlopen('https://seiga.nicovideo.jp/seiga/'+material_id).read()
 				soup      = BeautifulSoup(html, 'html.parser')
-				m_title   = soup.select_one('div.lg_ttl_illust > h1').text
-				m_creator = soup.select_one('strong').text
+				m_title   = soup.select_one('ul.sg_pankuzu > li.active > title[itemprop="title"]').text
+				m_creator = soup.select_one('div.lg_txt_illust > strong').text
 				print(' -> '+m_title+', '+m_creator)
 				titles.append(m_title)
 				creators.append(m_creator)
