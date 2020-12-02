@@ -13,6 +13,7 @@ import time
 import json
 import re
 import urllib
+import glob
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
@@ -26,69 +27,97 @@ if len(sys.argv) < 2:
 else:
 	filename = sys.argv[1]
 filename = os.path.abspath(filename)
-print('ファイルを読み込みます: '+os.path.basename(filename))
-root, ext = os.path.splitext(filename)
+# root, ext = os.path.splitext(filename)
 
 # --- 変数の用意
 IDs      = []
 length   = 0
 IDs_list = ''
 
-# --- Recotte Studioのプロジェクトファイルの場合
-if ext == '.ccproj':
-	# 読み出し
-	ccproj = {}
-	with open(filename, mode='r', encoding='utf-8') as f:
-		ccproj = json.load(f)
-	if len(ccproj) < 1:
-		print('ファイルが存在しないか、中身が空っぽです。')
-		sys.exit(1)
-	print('ファイルを読み込めました。')
-	# 検索
-	for item in ccproj['file-items']:
-		search_result = re.search('((nc|im|sm)\d{2,12})', item['apath'])
-		if not search_result == None:
-			IDs.append(search_result.groups()[0])
-	IDs    = list(set(IDs))
-	length = len(IDs)
-	# 整列＆出力
-	print('')
-	for i in range(length):
-		if i % 10 == 9 or i == length - 1:
-			print(IDs[i])
-			IDs_list = IDs_list + IDs[i] + '\n'
-		else:
-			print(IDs[i]+' ', end='')
-			IDs_list = IDs_list + IDs[i] + ' '
-	IDs_list = IDs_list[0:-1]
+# --- IDリストをファイルから取得する関数
+def getIdsList(filename):
+	# ファイル名を表示
+	print('ファイルを読み込みます: '+os.path.basename(filename))
+	root, ext = os.path.splitext(filename)
+	# Recotte Studioのプロジェクトファイルの場合
+	if ext == '.ccproj':
+		# 読み出し
+		ccproj = {}
+		with open(filename, mode='r', encoding='utf-8') as f:
+			ccproj = json.load(f)
+		if len(ccproj) < 1:
+			print('ファイルが存在しないか、中身が空っぽです。')
+			return
+			# sys.exit(1)
+		print('ファイルを読み込めました。')
+		# 検索
+		for item in ccproj['file-items']:
+			search_result = re.search('((nc|im|sm)\d{2,12})', item['apath'])
+			if not search_result == None:
+				IDs.append(search_result.groups()[0])
+		IDs    = list(set(IDs))
+		length = len(IDs)
+		# 整列＆出力
+		# print('')
+		# for i in range(length):
+		# 	if i % 10 == 9 or i == length - 1:
+		# 		print(IDs[i])
+		# 		IDs_list = IDs_list + IDs[i] + '\n'
+		# 	else:
+		# 		print(IDs[i]+' ', end='')
+		# 		IDs_list = IDs_list + IDs[i] + ' '
+		# IDs_list = IDs_list[0:-1]
+		return IDs
+	# その他のプロジェクトファイルの場合
+	else:
+		# 読み出し
+		aup = b''
+		with open(filename,mode='rb') as f:
+			aup = f.read()
+		if len(aup) < 1:
+			print('ファイルが存在しないか、中身が空っぽです。')
+			return
+			# sys.exit(1)
+		print('ファイルを読み込めました。')
+		# 検索
+		IDs    = re.findall(b'[^a-zA-Z0-9]((nc|im|sm)\\d{2,12})[^a-zA-Z0-9]', aup)
+		IDs    = list(set(IDs))
+		length = len(IDs)
+		for i in range(length):
+			IDs[i] = IDs[i][0].decode('utf-8')
+		# 整列＆出力
+		# print('')
+		# for i in range(length):
+		# 	IDs[i] = IDs[i].decode('utf-8')
+		# 	if i % 10 == 9 or i == length - 1:
+		# 		print(IDs[i])
+		# 		IDs_list = IDs_list + IDs[i] + '\n'
+		# 	else:
+		# 		print(IDs[i]+' ', end='')
+		# 		IDs_list = IDs_list + IDs[i] + ' '
+		# IDs_list = IDs_list[0:-1]
+		return IDs
 
-# --- その他のプロジェクトファイルの場合
-else:
-	# 読み出し
-	aup = b''
-	with open(filename,mode='rb') as f:
-		aup = f.read()
-	if len(aup) < 1:
-		print('ファイルが存在しないか、中身が空っぽです。')
-		sys.exit(1)
-	print('ファイルを読み込めました。')
-	# 検索
-	IDs    = re.findall(b'[^a-zA-Z0-9]((nc|im|sm)\\d{2,12})[^a-zA-Z0-9]', aup)
-	IDs    = list(set(IDs))
-	length = len(IDs)
-	for i in range(length):
-		IDs[i] = IDs[i][0]
-	# 整列＆出力
-	print('')
-	for i in range(length):
-		IDs[i] = IDs[i].decode('utf-8')
-		if i % 10 == 9 or i == length - 1:
-			print(IDs[i])
-			IDs_list = IDs_list + IDs[i] + '\n'
-		else:
-			print(IDs[i]+' ', end='')
-			IDs_list = IDs_list + IDs[i] + ' '
-	IDs_list = IDs_list[0:-1]
+# --- ディレクトリが指定されたら中身を全部見る
+if os.path.isdir(filename):
+	name_list = glob.glob(filename+'/**', recursive=True)
+	for name in name_list:
+		if os.path.isfile(name):
+			IDs.extend(getIdsList(name))
+elif os.path.isfile(filename):
+	IDs = getIdsList(filename)
+length = len(IDs)
+
+# --- 整列＆出力
+print('')
+for i in range(length):
+	if i % 10 == 9 or i == length - 1:
+		print(IDs[i])
+		IDs_list = IDs_list + IDs[i] + '\n'
+	else:
+		print(IDs[i]+' ', end='')
+		IDs_list = IDs_list + IDs[i] + ' '
+IDs_list = IDs_list[0:-1]
 
 # --- IDが存在しない場合はファイルを出さずに終了する
 if len(IDs) < 1:
@@ -129,7 +158,7 @@ for material_id in IDs:
 				titles.append('(取得に失敗)')
 				creators.append('(取得に失敗)')
 				retry_count = -1
-			except IndexError:
+			except (IndexError, AttributeError):
 				retry_count += 1
 				if retry_count >= 4:
 					print('\nIDの取得に失敗。ニコニ・コモンズに障害が発生しているか、素材が削除された可能性があります。')
