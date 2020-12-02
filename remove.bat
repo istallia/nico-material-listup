@@ -9,4 +9,3 @@ reg delete "HKEY_CURRENT_USER\Software\Classes\SystemFileAssociations\.ccproj" /
 reg delete "HKEY_CURRENT_USER\Software\Classes\*\shell\コモンズ素材の一覧を生成する" /f
 reg delete "HKEY_CURRENT_USER\Software\Classes\*\shell\ニコニコ素材の一覧を生成する" /f
 reg delete "HKEY_CURRENT_USER\Software\Classes\Directory\shell\ニコニコ素材の一覧を生成する" /f
-reg delete "HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\ニコニコ素材の一覧を生成する" /f
