@@ -27,7 +27,6 @@ if len(sys.argv) < 2:
 else:
 	filename = sys.argv[1]
 filename = os.path.abspath(filename)
-# root, ext = os.path.splitext(filename)
 
 # --- 変数の用意
 IDs      = []
@@ -48,7 +47,6 @@ def getIdsList(filename):
 		if len(ccproj) < 1:
 			print('ファイルが存在しないか、中身が空っぽです。')
 			return
-			# sys.exit(1)
 		print('ファイルを読み込めました。')
 		# 検索
 		for item in ccproj['file-items']:
@@ -57,16 +55,6 @@ def getIdsList(filename):
 				IDs.append(search_result.groups()[0])
 		IDs    = list(set(IDs))
 		length = len(IDs)
-		# 整列＆出力
-		# print('')
-		# for i in range(length):
-		# 	if i % 10 == 9 or i == length - 1:
-		# 		print(IDs[i])
-		# 		IDs_list = IDs_list + IDs[i] + '\n'
-		# 	else:
-		# 		print(IDs[i]+' ', end='')
-		# 		IDs_list = IDs_list + IDs[i] + ' '
-		# IDs_list = IDs_list[0:-1]
 		return IDs
 	# その他のプロジェクトファイルの場合
 	else:
@@ -77,7 +65,6 @@ def getIdsList(filename):
 		if len(aup) < 1:
 			print('ファイルが存在しないか、中身が空っぽです。')
 			return
-			# sys.exit(1)
 		print('ファイルを読み込めました。')
 		# 検索
 		IDs    = re.findall(b'[^a-zA-Z0-9]*((nc|im|sm|td)\\d{2,12})[^a-zA-Z0-9]', aup)
@@ -85,17 +72,6 @@ def getIdsList(filename):
 		length = len(IDs)
 		for i in range(length):
 			IDs[i] = IDs[i][0].decode('utf-8')
-		# 整列＆出力
-		# print('')
-		# for i in range(length):
-		# 	IDs[i] = IDs[i].decode('utf-8')
-		# 	if i % 10 == 9 or i == length - 1:
-		# 		print(IDs[i])
-		# 		IDs_list = IDs_list + IDs[i] + '\n'
-		# 	else:
-		# 		print(IDs[i]+' ', end='')
-		# 		IDs_list = IDs_list + IDs[i] + ' '
-		# IDs_list = IDs_list[0:-1]
 		return IDs
 
 # --- ディレクトリが指定されたら中身を全部見る
