@@ -82,6 +82,7 @@ if os.path.isdir(filename):
 			IDs.extend(getIdsList(name))
 elif os.path.isfile(filename):
 	IDs = getIdsList(filename)
+IDs    = list(set(IDs))
 length = len(IDs)
 
 # --- 整列＆出力
