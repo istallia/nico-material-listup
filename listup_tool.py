@@ -80,7 +80,7 @@ def getIdsList(filename):
 			# sys.exit(1)
 		print('ファイルを読み込めました。')
 		# 検索
-		IDs    = re.findall(b'[^a-zA-Z0-9]((nc|im|sm|td)\\d{2,12})[^a-zA-Z0-9]', aup)
+		IDs    = re.findall(b'[^a-zA-Z0-9]*((nc|im|sm|td)\\d{2,12})[^a-zA-Z0-9]', aup)
 		IDs    = list(set(IDs))
 		length = len(IDs)
 		for i in range(length):
@@ -173,7 +173,7 @@ for material_id in IDs:
 				print('タイトルと作者を取得: '+material_id, end='')
 				html      = urlopen('https://seiga.nicovideo.jp/seiga/'+material_id).read()
 				soup      = BeautifulSoup(html, 'html.parser')
-				m_title   = soup.select_one('ul.sg_pankuzu > li.active > title[itemprop="title"]').text
+				m_title   = soup.select_one('ul.sg_pankuzu > li.active > span[itemprop="title"]').text
 				m_creator = soup.select_one('div.lg_txt_illust > strong').text
 				print(' -> '+m_title+', '+m_creator)
 				titles.append(m_title)
@@ -228,7 +228,7 @@ for material_id in IDs:
 				print('タイトルと作者を取得: '+material_id, end='')
 				html      = urlopen('https://3d.nicovideo.jp/works/'+material_id).read()
 				soup      = BeautifulSoup(html, 'html.parser')
-				m_title   = soup.select_one('name.work-author-name').text
+				m_title   = soup.select_one('div.work-author-name').text
 				m_creator = soup.select_one('h1.work-info-title').text
 				print(' -> '+m_title+', '+m_creator)
 				titles.append(m_title)
