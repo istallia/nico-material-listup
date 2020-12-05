@@ -18,7 +18,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 # --- タイトルを描画
-print('------ 「ニコニコ素材リストアップツール」v0.6.0 by @is_ptcm ------\n')
+print('------ 「ニコニコ素材リストアップツール」v0.6.1 by @is_ptcm ------\n')
 
 # --- 読み出すaupファイルをコマンドライン引数より取得
 if len(sys.argv) < 2:
@@ -50,6 +50,7 @@ def getIdsList(filename):
 			return
 		print('ファイルを読み込めました。')
 		# 検索
+		IDs = []
 		for item in ccproj['file-items']:
 			search_result = re.search('((nc|im|sm|td)\d{2,12})', item['apath'])
 			if not search_result == None:
@@ -68,7 +69,7 @@ def getIdsList(filename):
 			return
 		print('ファイルを読み込めました。')
 		# 検索
-		IDs    = re.findall(b'(?<=^|[^a-zA-Z0-9])((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', aup)
+		IDs    = re.findall(b'(?:[^a-zA-Z0-9]|^)((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', aup)
 		IDs    = list(set(IDs))
 		length = len(IDs)
 		for i in range(length):
