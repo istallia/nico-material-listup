@@ -18,7 +18,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 # --- タイトルを描画
-print('------ 「ニコニコ素材リストアップツール」v0.6.1 by @is_ptcm ------\n')
+print('------ 「ニコニコ素材リストアップツール」v0.6.2 by @is_ptcm ------\n')
 
 # --- 読み出すaupファイルをコマンドライン引数より取得
 if len(sys.argv) < 2:
@@ -37,7 +37,7 @@ IDs_list         = ''
 # --- IDリストをファイルから取得する関数
 def getIdsList(filename):
 	# ファイル名を表示
-	print('ファイルを読み込みます: '+os.path.basename(filename))
+	print('ファイルを読み込みます: '+os.path.basename(filename), end='')
 	root, ext = os.path.splitext(filename)
 	# Recotte Studioのプロジェクトファイルの場合
 	if ext == '.ccproj':
@@ -46,9 +46,8 @@ def getIdsList(filename):
 		with open(filename, mode='r', encoding='utf-8') as f:
 			ccproj = json.load(f)
 		if len(ccproj) < 1:
-			print('ファイルが存在しないか、中身が空っぽです。')
+			print(' -> 空、または読み込み失敗')
 			return []
-		print('ファイルを読み込めました。')
 		# 検索
 		IDs = []
 		for item in ccproj['file-items']:
@@ -57,6 +56,7 @@ def getIdsList(filename):
 				IDs.append(search_result.groups()[0])
 		IDs    = list(set(IDs))
 		length = len(IDs)
+		print(' -> '+str(length)+'件のIDを抽出')
 		return IDs
 	# その他のプロジェクトファイルの場合
 	else:
@@ -65,15 +65,15 @@ def getIdsList(filename):
 		with open(filename,mode='rb') as f:
 			aup = f.read()
 		if len(aup) < 1:
-			print('ファイルが存在しないか、中身が空っぽです。')
+			print(' -> 空、または読み込み失敗')
 			return []
-		print('ファイルを読み込めました。')
 		# 検索
 		IDs    = re.findall(b'(?:[^a-zA-Z0-9]|^)((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', aup)
 		IDs    = list(set(IDs))
 		length = len(IDs)
 		for i in range(length):
 			IDs[i] = IDs[i][0].decode('utf-8')
+		print(' -> '+str(length)+'件のIDを抽出')
 		return IDs
 
 # --- ディレクトリが指定されたら中身を全部見る
