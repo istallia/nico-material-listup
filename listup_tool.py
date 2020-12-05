@@ -68,7 +68,7 @@ def getIdsList(filename):
 			return
 		print('ファイルを読み込めました。')
 		# 検索
-		IDs    = re.findall(b'(?:^|[^a-zA-Z0-9])((nc|im|sm|td)\\d{2,12})[^a-zA-Z0-9]', aup)
+		IDs    = re.findall(b'(?<=^|[^a-zA-Z0-9])((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', aup)
 		IDs    = list(set(IDs))
 		length = len(IDs)
 		for i in range(length):
@@ -80,7 +80,7 @@ if os.path.isdir(filename):
 	name_list = glob.glob(filename+'/**', recursive=True)
 	for name in name_list:
 		file_title, ext = os.path.splitext(name);
-		if os.path.isfile(name) and not ext[1:] in exclude_ext_list:
+		if os.path.isfile(name) and not ext[1:].lower() in exclude_ext_list:
 			IDs.extend(getIdsList(name))
 elif os.path.isfile(filename):
 	IDs = getIdsList(filename)
