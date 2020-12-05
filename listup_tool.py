@@ -47,7 +47,7 @@ def getIdsList(filename):
 			ccproj = json.load(f)
 		if len(ccproj) < 1:
 			print('ファイルが存在しないか、中身が空っぽです。')
-			return
+			return []
 		print('ファイルを読み込めました。')
 		# 検索
 		IDs = []
@@ -66,7 +66,7 @@ def getIdsList(filename):
 			aup = f.read()
 		if len(aup) < 1:
 			print('ファイルが存在しないか、中身が空っぽです。')
-			return
+			return []
 		print('ファイルを読み込めました。')
 		# 検索
 		IDs    = re.findall(b'(?:[^a-zA-Z0-9]|^)((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', aup)
