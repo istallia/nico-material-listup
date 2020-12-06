@@ -18,7 +18,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 # --- タイトルを描画
-print('------ 「ニコニコ素材リストアップツール」v0.6.2 by @is_ptcm ------\n')
+print('------ 「ニコニコ素材リストアップツール」v0.6.3 by @is_ptcm ------\n')
 
 # --- 読み出すaupファイルをコマンドライン引数より取得
 if len(sys.argv) < 2:
@@ -68,6 +68,7 @@ def getIdsList(filename):
 			print(' -> 空、または読み込み失敗')
 			return []
 		# 検索
+		aup    = aup.replace(b'\x00', b'')
 		IDs    = re.findall(b'(?:[^a-zA-Z0-9]|^)((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', aup)
 		IDs    = list(set(IDs))
 		length = len(IDs)
