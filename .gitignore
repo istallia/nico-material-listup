@@ -139,6 +139,8 @@ cython_debug/
 
 # テスト用プロジェクトファイル
 *.aup
+*.exo
+*.exa
 *.ccproj
 IDs.*
 *.zip
