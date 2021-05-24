@@ -138,6 +138,7 @@ dmypy.json
 cython_debug/
 
 # テスト用プロジェクトファイル
+適当なIDリスト.txt
 *.aup
 *.exo
 *.exa
