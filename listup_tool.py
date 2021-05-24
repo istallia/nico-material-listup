@@ -18,7 +18,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 # --- タイトルを描画
-print('------ 「ニコニコ素材リストアップツール」v0.6.3 by @is_ptcm ------\n')
+print('------ 「ニコニコ素材リストアップツール」v0.6.4 by @is_ptcm ------\n')
 
 # --- 読み出すaupファイルをコマンドライン引数より取得
 if len(sys.argv) < 2:
@@ -127,8 +127,8 @@ for material_id in IDs:
 				print('タイトルと作者を取得: '+material_id, end='')
 				html      = urlopen('http://commons.nicovideo.jp/material/'+material_id).read()
 				soup      = BeautifulSoup(html, 'html.parser')
-				m_title   = soup.select_one('div.commons_title').text
-				m_creator = soup.select_one('div.m_user_profile a.userlink').text
+				m_title   = soup.select_one('div.materialHeadTitle').text
+				m_creator = soup.select_one('div.mUserProfile a.materialUsername').text
 				print(' -> '+m_title+', '+m_creator)
 				titles.append(m_title)
 				creators.append(m_creator)
