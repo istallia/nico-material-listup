@@ -69,7 +69,7 @@ def getIdsList(filename):
 			return []
 		# 検索
 		aup    = aup.replace(b'\x00', b'')
-		IDs    = re.findall(b'(?:[^a-zA-Z0-9]|^)((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', aup)
+		IDs    = re.findall(b'(?:\\b|^)((nc|im|sm|td)\\d{2,12})(?=\\b|$)', aup)
 		IDs    = list(set(IDs))
 		length = len(IDs)
 		for i in range(length):
