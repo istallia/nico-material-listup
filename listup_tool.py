@@ -59,17 +59,27 @@ for i in range(len(input_list)):
 	elif os.path.isfile(input_list[i]):
 		file_list.append(input_list[i])
 for i in range(len(dir_list)):
-	files = [p for p in glob.glob(dir_list[i] + '\\**', recursive=True) if os.path.isfile(p)]
+	files = [p for p in glob.glob(dir_list[i]+'\\**', recursive=True) if os.path.isfile(p)]
 	for j in range(len(files)):
 		file_list.append(os.path.abspath(files[j]))
 
 
 # --- すべてのIDを取得
+print('')
 id_list = []
 for i in range(len(file_list)):
 	id_list.extend(tool.getIdList(file_list[i]))
-print(id_list)
+if len(id_list) < 1:
+	print('ニコニコ素材が見つかりませんでした。Enterで終了します:')
+	sys.exit(0)
+print('+ 合計' + str(len(id_list)) + '件のIDを抽出\n')
 
 
-# --- デバッグ用
-input('Enterで終了:')
+
+# --- IDリストを保存し、さらにタイトルや作者も取得するか確認する
+id_text = tool.generateIdListText(id_list)
+with open('IDs.txt', mode='w', encoding='sjis') as f:
+	f.write(id_text)
+confirm = input('オンラインでタイトルと作者を取得しますか？結果はCSV形式で保存されます[y/N(Enter)] ').strip()
+if not confirm == 'y' and not confirm == 'Y':
+	sys.exit(0)

@@ -20,7 +20,7 @@ from bs4 import BeautifulSoup
 # --- ファイルからIDを抽出
 def getIdList(file_path):
 	# 下準備
-	print('[読み込み] '+os.path.basename(file_path), end='')
+	print('+ '+os.path.basename(file_path), end='')
 	content = b''
 	# ファイルを読み込み
 	with open(file_path, mode='rb') as f:
@@ -36,3 +36,16 @@ def getIdList(file_path):
 		id_list[i] = id_list[i][0].decode('utf-8')
 	print(' -> '+str(len(id_list))+'件のIDを抽出')
 	return id_list
+
+
+# --- IDリストの配列から10件ごとのテキストを生成
+def generateIdListText(id_list):
+	id_text = ''
+	if len(id_list) < 1:
+		return ''
+	for i in range(len(id_list)):
+		if i % 10 == 9 or i == len(id_list) - 1:
+			id_text = id_text + id_list[i] + '\n'
+		else:
+			id_text = id_text + id_list[i] + ' '
+	return id_text[0:-1]
