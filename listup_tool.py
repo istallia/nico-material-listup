@@ -20,11 +20,11 @@ from bs4 import BeautifulSoup
 import listup_tool_lib as tool
 
 
-#--- タイトルを描画
+# --- タイトルを描画
 print('------ 「ニコニコ素材リストアップツール」v0.7.0 by @is_ptcm ------\n')
 
 
-#--- 除外リストを作成
+# --- 除外リストを作成
 exclude_ext_list = ['lwi', 'avi', 'mp4', 'flv', 'mov', 'asf', 'mkv', 'webm', 'mpg', 'm2ts', 'mpg', 'mpeg', 'wav', 'mp3', 'ogg', 'wma', 'm4a', 'flac', 'aif', 'aiff', 'aac', 'mid', 'midi', 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'ico', 'zip', 'lzh', '7z', 'gz', 'tar', 'exe', 'dll']
 if os.path.isfile('./exclude-ext.txt'):
 	# 追加除外リストが存在すれば読み込む
@@ -34,7 +34,7 @@ if os.path.isfile('./exclude-ext.txt'):
 	exclude_ext_list.extend(re.findall(r'[-\w]+', content))
 
 
-#--- 読み出すファイル/フォルダをコマンドライン引数から取得(複数可)
+# --- 読み出すファイル/フォルダをコマンドライン引数から取得(複数可)
 input_list = []
 if len(sys.argv) < 2:
 	print('ファイル名(or パス)を入力してください: ', end='')
@@ -47,11 +47,10 @@ for i in range(len(input_list)):
 	root, ext = os.path.splitext(input_list[i])
 	if not ext[1:] in exclude_ext_list:
 		input_list[i] = os.path.abspath(input_list[i])
-		print(input_list[i])
 input_list = list(set(input_list))
 
 
-#--- すべてのファイル名を取得
+# --- すべてのファイル名を取得
 file_list = []
 dir_list  = []
 for i in range(len(input_list)):
@@ -60,10 +59,17 @@ for i in range(len(input_list)):
 	elif os.path.isfile(input_list[i]):
 		file_list.append(input_list[i])
 for i in range(len(dir_list)):
-	files = glob.glob(dir_list[i] + '\\**')
+	files = [p for p in glob.glob(dir_list[i] + '\\**', recursive=True) if os.path.isfile(p)]
 	for j in range(len(files)):
 		file_list.append(os.path.abspath(files[j]))
 
 
-#--- デバッグ用
+# --- すべてのIDを取得
+id_list = []
+for i in range(len(file_list)):
+	id_list.extend(tool.getIdList(file_list[i]))
+print(id_list)
+
+
+# --- デバッグ用
 input('Enterで終了:')
