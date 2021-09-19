@@ -49,3 +49,62 @@ def generateIdListText(id_list):
 		else:
 			id_text = id_text + id_list[i] + ' '
 	return id_text[0:-1]
+
+
+# --- 素材IDからID、タイトル、投稿者、URLの配列を取得
+def fetchMaterialInfo(id):
+	# 素材種別からURLを作る
+	head = id[:2]
+	url  = ''
+	print('+ '+id, end='')
+	if head == 'sm':
+		url = 'https://www.nicovideo.jp/watch/' + id
+	elif head == 'im':
+		url = 'https://seiga.nicovideo.jp/seiga/' + id
+	elif head == 'nc':
+		url = 'https://commons.nicovideo.jp/material/' + id
+	elif head == 'td':
+		url = 'https://3d.nicovideo.jp/works/' + id
+	# 必要な情報をスクレイピング
+	max_retry  = 3
+	is_success = False
+	title      = ''
+	creator    = ''
+	for i in range(max_retry):
+		try:
+			# html取得
+			html = urlopen(url).read()
+			soup = BeautifulSoup(html, 'html.parser')
+			# タイトルと投稿者を取得
+			if head == 'sm':
+				title   = soup.select_one('meta[name="twitter:title"]')['content']
+				creator = json.loads(soup.select_one('script[type="application/ld+json"]').string)
+				creator = creator['author']['name']
+			elif head == 'im':
+				title   = soup.select_one('ul.sg_pankuzu > li.active > span[itemprop="title"]').text
+				creator = soup.select_one('div.lg_txt_illust > strong').text
+			elif head == 'nc':
+				title   = soup.select_one('div.materialHeadTitle').text
+				creator = soup.select_one('div.mUserProfile a.materialUsername').text
+			elif head == 'td':
+				title   = soup.select_one('div.work-author-name').text
+				creator = soup.select_one('h1.work-info-title').text
+			print(' -> ' + title + ', ' + creator)
+			is_success = True
+			break
+		except urllib.error.HTTPError as e:
+			# 取得に失敗: ネットワークエラー
+			print(' -> 素材ページにアクセスできませんでした')
+			break
+		except IndexError:
+			# 取得に失敗: 指定要素がない
+			if i == max_retry-1:
+				print(' -> タイトルと投稿者の取得に失敗')
+	# カンマは後で使うので置換
+	title   = title.replace(',', '，')
+	creator = creator.replace(',', '，')
+	# 取得に成功していればその値を返す
+	if is_success:
+		return [id, title, creator, url]
+	else:
+		return [id, '(取得失敗)', '(取得失敗)', url]
