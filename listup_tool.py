@@ -10,13 +10,8 @@
 # --- パッケージ読み込み
 import os.path
 import sys
-import time
-import json
 import re
-import urllib
 import glob
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
 import listup_tool_lib as tool
 
 
