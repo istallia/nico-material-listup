@@ -63,7 +63,7 @@ for i in range(len(dir_list)):
 	files = [p for p in glob.glob(dir_list[i]+'\\**', recursive=True) if os.path.isfile(p)]
 	for j in range(len(files)):
 		root, ext = os.path.splitext(input_list[i])
-		if not not ext[1:] in exclude_ext_list:
+		if not ext[1:] in exclude_ext_list:
 			file_list.append(os.path.abspath(files[j]))
 base_path = os.path.dirname(file_list[0])
 
@@ -74,7 +74,7 @@ id_list = []
 for i in range(len(file_list)):
 	id_list.extend(tool.getIdList(file_list[i]))
 if len(id_list) < 1:
-	print('ニコニコ素材が見つかりませんでした。Enterで終了します:')
+	input('ニコニコ素材が見つかりませんでした。Enterで終了します:')
 	sys.exit(0)
 print('+ 合計' + str(len(id_list)) + '件のIDを抽出\n')
 
