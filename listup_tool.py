@@ -24,17 +24,32 @@ import listup_tool_lib as tool
 print('------ 「ニコニコ素材リストアップツール」v0.7.0 by @is_ptcm ------\n')
 
 
-#--- 読み出すファイルをコマンドライン引数から取得(複数可)
-file_list = []
+#--- 読み出すファイル/フォルダをコマンドライン引数から取得(複数可)
+input_list = []
 if len(sys.argv) < 2:
 	print('ファイル名(or パス)を入力してください: ', end='')
-	file_list.append(input().strip())
+	file_name = input().strip()
+	input_list.append(file_name)
 else:
 	for i in range(1,len(sys.argv)):
-		file_list.append(sys.argv[i])
-for i in range(len(file_list)):
-	file_list[i] = os.path.abspath(file_list[i])
-file_list = list(set(file_list))
+		input_list.append(sys.argv[i])
+for i in range(len(input_list)):
+	input_list[i] = os.path.abspath(input_list[i])
+input_list = list(set(input_list))
+
+
+#--- すべてのファイル名を取得
+file_list = []
+dir_list  = []
+for i in range(len(input_list)):
+	if os.path.isdir(input_list[i]):
+		dir_list.append(input_list[i])
+	elif os.path.isfile(input_list[i]):
+		file_list.append(input_list[i])
+for i in range(len(dir_list)):
+	files = glob.glob(dir_list + '\\**')
+	for j in range(len(files)):
+		file_list.append(os.path.abspath(files[j]))
 
 
 #--- デバッグ用
