@@ -34,7 +34,7 @@ def getIdList(file_path, use_path):
 		path_list = re.findall(b'(?:\\w:)?(?:[\\\\/][^\\/\\\\:\\*\\?<>|\\n\\t\\x01-\\x1f]{1,127})+\\.[-\\w]{1,12}', content)
 		content   = b'\n'.join(path_list)
 		root, ext = os.path.splitext(file_path)
-		if ext[1:] == 'aup':
+		if ext[1:].lower() == 'aup':
 			# AviUtlでは連続する数字の短縮が行われる
 			for length in range(3,10):
 				for num in range(10):

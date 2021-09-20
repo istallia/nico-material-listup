@@ -64,13 +64,13 @@ for i in range(len(input_list)):
 	root, ext = os.path.splitext(input_list[i])
 	if os.path.isdir(input_list[i]):
 		dir_list.append(input_list[i])
-	elif os.path.isfile(input_list[i]) and not ext[1:] in exclude_ext_list:
+	elif os.path.isfile(input_list[i]) and not (ext[1:].lower() in exclude_ext_list):
 		file_list.append(input_list[i])
 for i in range(len(dir_list)):
 	files = [p for p in glob.glob(dir_list[i]+'\\**', recursive=True) if os.path.isfile(p)]
 	for j in range(len(files)):
-		root, ext = os.path.splitext(input_list[i])
-		if not ext[1:] in exclude_ext_list:
+		root, ext = os.path.splitext(files[j])
+		if not (ext[1:].lower() in exclude_ext_list):
 			file_list.append(os.path.abspath(files[j]))
 if len(file_list) < 1:
 	input('\n抽出可能なファイルが存在しません。Enterで終了します:')
@@ -83,10 +83,11 @@ print('')
 id_list = []
 for i in range(len(file_list)):
 	root, ext = os.path.splitext(file_list[i])
-	id_list.extend(tool.getIdList(file_list[i], ext[1:] in step2_ext_list))
+	id_list.extend(tool.getIdList(file_list[i], ext[1:].lower() in step2_ext_list))
 if len(id_list) < 1:
 	input('ニコニコ素材が見つかりませんでした。Enterで終了します:')
 	sys.exit(0)
+id_list = list(set(id_list))
 print('+ 合計' + str(len(id_list)) + '件のIDを抽出\n')
 
 
