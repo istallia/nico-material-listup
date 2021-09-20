@@ -30,6 +30,17 @@ if os.path.isfile(exclude_csv_path):
 	exclude_ext_list.extend(re.findall(r'[-\w]+', content))
 
 
+# --- 2段階抽出を利用するリストを作成
+step2_csv_path = os.path.dirname(os.path.abspath(__file__)) + '2step_ext_list.txt'
+step2_ext_list = ['aup', 'pmm', 'emm']
+if os.path.isfile(step2_csv_path):
+	# 2段階抽出を利用する拡張子リストが存在すれば読み込む
+	content = ''
+	with open(step2_csv_path, mode='r', encoding='utf-8') as f:
+		content = f.read()
+	step2_ext_list.extend(re.findall(r'[-\w]+', content))
+
+
 # --- 読み出すファイル/フォルダをコマンドライン引数から取得(複数可)
 input_list = []
 if len(sys.argv) < 2:
@@ -70,7 +81,8 @@ base_path = os.path.dirname(file_list[0])
 print('')
 id_list = []
 for i in range(len(file_list)):
-	id_list.extend(tool.getIdList(file_list[i], True))
+	root, ext = os.path.splitext(file_list[i])
+	id_list.extend(tool.getIdList(file_list[i], ext in step2_csv_path))
 if len(id_list) < 1:
 	input('ニコニコ素材が見つかりませんでした。Enterで終了します:')
 	sys.exit(0)
