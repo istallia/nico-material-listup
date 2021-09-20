@@ -60,6 +60,9 @@ for i in range(len(dir_list)):
 		root, ext = os.path.splitext(input_list[i])
 		if not ext[1:] in exclude_ext_list:
 			file_list.append(os.path.abspath(files[j]))
+if len(file_list) < 1:
+	input('抽出可能なファイルが存在しません。Enterで終了します:')
+	sys.exit(0)
 base_path = os.path.dirname(file_list[0])
 
 
@@ -67,7 +70,7 @@ base_path = os.path.dirname(file_list[0])
 print('')
 id_list = []
 for i in range(len(file_list)):
-	id_list.extend(tool.getIdList(file_list[i]))
+	id_list.extend(tool.getIdList(file_list[i], True))
 if len(id_list) < 1:
 	input('ニコニコ素材が見つかりませんでした。Enterで終了します:')
 	sys.exit(0)

@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 
 
 # --- ファイルからIDを抽出
-def getIdList(file_path):
+def getIdList(file_path, use_path):
 	# 下準備
 	print('+ '+os.path.basename(file_path), end='')
 	content = b''
@@ -25,8 +25,13 @@ def getIdList(file_path):
 	if len(content) < 1:
 		print(' -> 空、または読み込み失敗')
 		return []
-	# 抽出する
 	content = content.replace(b'\x00', b'')
+	# 抽出する (ファイルパス)
+	if use_path:
+		path_list = re.findall(b'(?:\\w:)?(?:[\\\\/][^\\/\\\\:\\*\\?<>|\\n\\t\\x01-\\x1f]{1,127})+\\.[-\w]{1,12}', content)
+		content   = b'\n'.join(path_list)
+		print('\n' + content.decode('cp932', errors='backslashreplace'))
+	# 抽出する (ID直接検索)
 	id_list = re.findall(b'(?:\\b|^)((nc|im|sm|td)\\d{2,12})(?=\\b|$)', content)
 	id_list = list(set(id_list))
 	for i in range(len(id_list)):
