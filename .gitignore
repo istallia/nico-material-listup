@@ -148,6 +148,7 @@ IDs.*
 on.bat
 off.bat
 *.exe
+nc*
 
 # 旧環境
 ltenv/
