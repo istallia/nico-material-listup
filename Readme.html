@@ -1095,7 +1095,12 @@ IDをまとめたテキストファイルやCSVファイルはプロジェクト
 <h2 id="_5">誤検知対策: 除外拡張子リスト<a class="headerlink" href="#_5" title="Permanent link"></a></h2>
 <p>一部の拡張子は中身を読み込まないように設定されています。<br />
 ツールと同じフォルダに<code>exclude_ext_list.txt</code>を作成し、その中に除外したい拡張子を書き込んでおくと、追加でその拡張子も除外します。</p>
-<pre><code>lwi, avi, mp4, flv, mov, asf, mkv, webm, mpg, m2ts, mpg, mpeg, wav, mp3, ogg, wma, m4a, flac, aif, aiff, aac, mid, midi, jpg, jpeg, png, gif, bmp, webp, ico, zip, lzh, 7z, gz, tar, exe, dll
+<pre><code>lwi,  avi,  mp4,  flv,  mov, asf,  mkv,  webm, mpg,  m2ts,
+mpg,  mpeg, wav,  mp3,  ogg, wma,  m4a,  flac, aif,  aiff,
+aac,  mid,  midi, jpg,  jpe, jpeg, png,  gif,  bmp,  webp,
+psd,  apd,  ai,   mdp,  ico, zip,  lzh,  7z,   gz,   tar,
+rar,  exe,  dll,  msi,  sys, iso,  docx, dotx, xlsx, xlsm,
+pptx, pptm, potx, potm, db
 </code></pre>
 <h2 id="2">誤検知対策: 2段階抽出を利用する拡張子リスト<a class="headerlink" href="#2" title="Permanent link"></a></h2>
 <p>一部の拡張子ではファイルパスを抽出し、その中からIDを抽出する2段階抽出を利用します。<br />
