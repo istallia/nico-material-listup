@@ -31,7 +31,7 @@ def getIdList(file_path, use_path):
 		path_list = re.findall(b'(?:\\w:)?(?:[\\\\/][^\\/\\\\:\\*\\?<>|\\n\\t\\x01-\\x1f]{1,127})+\\.[-\\w]{1,12}', content)
 		content   = b'\n'.join(path_list)
 	# 抽出する (ID直接検索)
-	id_list = re.findall(b'(?:\\b|^)((nc|im|sm|td)\\d{2,12})(?=\\b|$)', content)
+	id_list = re.findall(b'(?:[^a-zA-Z0-9]|^)((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', content)
 	id_list = list(set(id_list))
 	for i in range(len(id_list)):
 		id_list[i] = id_list[i][0].decode('utf-8')
