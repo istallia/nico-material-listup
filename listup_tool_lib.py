@@ -3,10 +3,12 @@
 
 # 「ニコニコ素材リストアップツール ライブラリ」by @is_ptcm
 # メインスクリプトと関数をまとめたスクリプトを分けることにより可読性の向上を目指す
+VERSION = 'v0.7.0'
 
 
 # --- パッケージ読み込み
 import os.path
+import time
 import json
 import re
 import urllib
@@ -36,8 +38,6 @@ def getIdList(file_path, use_path):
 			for length in range(3,10):
 				for num in range(10):
 					content = re.sub(bytes([0x80+length])+bytes([0x30+num])+b'[\x01-\x79]', b'%d'%(num)*length, content)
-			with open('./debug.txt', mode='w', encoding='cp932') as f:
-				f.write(content.decode('cp932', errors='backslashreplace'))
 	# 抽出する (ID直接検索)
 	id_list = re.findall(b'(?:[^a-zA-Z0-9]|^)((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', content)
 	id_list = list(set(id_list))
@@ -117,3 +117,42 @@ def fetchMaterialInfo(id):
 		return [id, title, creator, url]
 	else:
 		return [id, '(取得失敗)', '(取得失敗)', url]
+
+
+# --- バージョン取得
+def getVersion():
+	return VERSION
+
+
+# --- 更新を確認(7日ごと)
+def checkUpdate():
+	# 最終確認日時(unix時間)を取得
+	last_time = 0
+	file_name = os.path.dirname(os.path.abspath(__file__)) + '/_version_check'
+	if os.path.isfile(file_name):
+		last_time_text = '0'
+		with open(file_name, mode='r', encoding='ascii') as f:
+			last_time_text = f.read()
+		last_time = int(last_time_text)
+	# 現在時刻と比較する
+	current_time = int(time.time())
+	if last_time > current_time-604800:
+		return
+	# オンラインでバージョン確認
+	last_version = VERSION
+	try:
+		# html取得
+		html = urlopen('https://textblog.minibird.jp/twitter/').read()
+		soup = BeautifulSoup(html, 'html.parser')
+		# バージョン文字列取得
+		last_version = soup.select_one('#listup-tool-last-version').text
+		last_version = last_version[12:].replace('.zip', '').replace('-', '.')
+	except:
+		pass
+	# 更新があれば通知
+	if last_version != VERSION:
+		print('\n現在の最新版は' + last_version + 'です。\n')
+	# 最終確認日時を更新
+	with open(file_name, mode='w', encoding='ascii') as f:
+		f.write(str(current_time))
+	return
