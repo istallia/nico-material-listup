@@ -82,7 +82,7 @@ print('')
 id_list = []
 for i in range(len(file_list)):
 	root, ext = os.path.splitext(file_list[i])
-	id_list.extend(tool.getIdList(file_list[i], ext in step2_csv_path))
+	id_list.extend(tool.getIdList(file_list[i], ext[1:] in step2_ext_list))
 if len(id_list) < 1:
 	input('ニコニコ素材が見つかりませんでした。Enterで終了します:')
 	sys.exit(0)

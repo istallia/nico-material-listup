@@ -30,6 +30,14 @@ def getIdList(file_path, use_path):
 	if use_path:
 		path_list = re.findall(b'(?:\\w:)?(?:[\\\\/][^\\/\\\\:\\*\\?<>|\\n\\t\\x01-\\x1f]{1,127})+\\.[-\\w]{1,12}', content)
 		content   = b'\n'.join(path_list)
+		root, ext = os.path.splitext(file_path)
+		if ext[1:] == 'aup':
+			# AviUtlでは連続する数字の短縮が行われる
+			for length in range(3,10):
+				for num in range(10):
+					content = re.sub(bytes([0x80+length])+bytes([0x30+num])+b'[\x01-\x79]', b'%d'%(num)*length, content)
+			with open('./debug.txt', mode='w', encoding='cp932') as f:
+				f.write(content.decode('cp932', errors='backslashreplace'))
 	# 抽出する (ID直接検索)
 	id_list = re.findall(b'(?:[^a-zA-Z0-9]|^)((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', content)
 	id_list = list(set(id_list))
