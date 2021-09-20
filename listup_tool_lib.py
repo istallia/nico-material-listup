@@ -8,6 +8,7 @@ VERSION = 'v0.7.0'
 
 # --- パッケージ読み込み
 import os.path
+import sys
 import time
 import json
 import re
@@ -128,7 +129,7 @@ def getVersion():
 def checkUpdate():
 	# 最終確認日時(unix時間)を取得
 	last_time = 0
-	file_name = os.path.dirname(os.path.abspath(__file__)) + '/_version_check'
+	file_name = os.path.dirname(os.path.abspath(sys.argv[0])) + '/_version_check'
 	if os.path.isfile(file_name):
 		last_time_text = '0'
 		with open(file_name, mode='r', encoding='ascii') as f:

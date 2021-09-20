@@ -21,7 +21,7 @@ tool.checkUpdate()
 
 
 # --- 除外リストを作成
-exclude_csv_path = os.path.dirname(os.path.abspath(__file__)) + '/exclude_ext_list.txt'
+exclude_csv_path = os.path.dirname(os.path.abspath(sys.argv[0])) + '/exclude_ext_list.txt'
 exclude_ext_list = ['lwi', 'avi', 'mp4', 'flv', 'mov', 'asf', 'mkv', 'webm', 'mpg', 'm2ts', 'mpg', 'mpeg', 'wav', 'mp3', 'ogg', 'wma', 'm4a', 'flac', 'aif', 'aiff', 'aac', 'mid', 'midi', 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'ico', 'zip', 'lzh', '7z', 'gz', 'tar', 'exe', 'dll']
 if os.path.isfile(exclude_csv_path):
 	# 追加除外リストが存在すれば読み込む
@@ -32,7 +32,7 @@ if os.path.isfile(exclude_csv_path):
 
 
 # --- 2段階抽出を利用するリストを作成
-step2_csv_path = os.path.dirname(os.path.abspath(__file__)) + '/2step_ext_list.txt'
+step2_csv_path = os.path.dirname(os.path.abspath(sys.argv[0])) + '/2step_ext_list.txt'
 step2_ext_list = ['aup', 'pmm', 'emm']
 if os.path.isfile(step2_csv_path):
 	# 2段階抽出を利用する拡張子リストが存在すれば読み込む
