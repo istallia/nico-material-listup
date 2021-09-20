@@ -61,7 +61,7 @@ for i in range(len(dir_list)):
 		if not ext[1:] in exclude_ext_list:
 			file_list.append(os.path.abspath(files[j]))
 if len(file_list) < 1:
-	input('抽出可能なファイルが存在しません。Enterで終了します:')
+	input('\n抽出可能なファイルが存在しません。Enterで終了します:')
 	sys.exit(0)
 base_path = os.path.dirname(file_list[0])
 
