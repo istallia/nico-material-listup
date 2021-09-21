@@ -3,7 +3,7 @@
 
 # 「ニコニコ素材リストアップツール ライブラリ」by @is_ptcm
 # メインスクリプトと関数をまとめたスクリプトを分けることにより可読性の向上を目指す
-VERSION = 'v0.7.0'
+VERSION = 'v0.7.1'
 
 
 # --- パッケージ読み込み
@@ -29,6 +29,7 @@ def getIdList(file_path, use_path):
 		print(' -> 空、または読み込み失敗')
 		return []
 	content = content.replace(b'\x00', b'')
+	content = re.sub(b'[\\x80-\\xff].', b'_', content)
 	# 抽出する (ファイルパス)
 	if use_path:
 		path_list = re.findall(b'(?:\\w:)?(?:[\\\\/][^\\/\\\\:\\*\\?<>|\\n\\t\\x01-\\x1f]{1,127})+\\.[-\\w]{1,12}', content)
