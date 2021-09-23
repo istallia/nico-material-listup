@@ -1,6 +1,6 @@
 
-# ニコニコ素材リストアップツール v0.7.0
-(2021-09-20)
+# ニコニコ素材リストアップツール v0.7.2
+(2021-09-23)
 
 ## 概要
 
@@ -43,12 +43,13 @@ zipをダウンロードし解凍したら、中にある`regist.bat`を管理�
 一部の拡張子は中身を読み込まないように設定されています。  
 ツールと同じフォルダに`exclude_ext_list.txt`を作成し、その中に除外したい拡張子を書き込んでおくと、追加でその拡張子も除外します。
 
-	lwi,  avi,  mp4,  flv,  mov, asf,  mkv,  webm, mpg,  m2ts,
-	mpg,  mpeg, wav,  mp3,  ogg, wma,  m4a,  flac, aif,  aiff,
-	aac,  mid,  midi, jpg,  jpe, jpeg, png,  gif,  bmp,  webp,
-	psd,  apd,  ai,   mdp,  ico, zip,  lzh,  7z,   gz,   tar,
-	rar,  exe,  dll,  msi,  sys, iso,  docx, dotx, xlsx, xlsm,
-	pptx, pptm, potx, potm, db
+	lwi,  avi,  mp4,  flv,  mov, asf,  mkv,  webm, mpg,   m2ts,
+	mpg,  mpeg, wav,  mp3,  ogg, wma,  m4a,  flac, aif,   aiff,
+	aac,  mid,  midi, jpg,  jpe, jpeg, png,  gif,  bmp,   webp,
+	psd,  apd,  ai,   mdp,  ico, zip,  lzh,  7z,   gz,    tar,
+	rar,  exe,  dll,  msi,  sys, iso,  docx, dotx, xlsx,  xlsm,
+	pptx, pptm, potx, potm, db,  pdf,  lnk,  url,  cache, user,
+	auf,  auo,  aui,  bak,  pdb, sln
 
 ## 誤検知対策: 2段階抽出を利用する拡張子リスト
 
