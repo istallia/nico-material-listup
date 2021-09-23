@@ -43,6 +43,7 @@ if os.path.isfile(step2_csv_path):
 
 
 # --- 読み出すファイル/フォルダをコマンドライン引数から取得(複数可)
+base_path  = ''
 input_list = []
 if len(sys.argv) < 2:
 	print('ファイル名(or パス)を入力してください: ', end='')
@@ -58,7 +59,6 @@ base_path  = os.path.dirname(input_list[0])
 
 
 # --- すべてのファイル名を取得
-base_path = ''
 file_list = []
 dir_list  = []
 for i in range(len(input_list)):
