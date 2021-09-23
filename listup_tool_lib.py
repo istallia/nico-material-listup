@@ -3,7 +3,7 @@
 
 # 「ニコニコ素材リストアップツール ライブラリ」by @is_ptcm
 # メインスクリプトと関数をまとめたスクリプトを分けることにより可読性の向上を目指す
-VERSION = 'v0.7.2'
+VERSION = 'v0.7.3'
 
 
 # --- パッケージ読み込み
@@ -28,18 +28,18 @@ def getIdList(file_path, use_path):
 	if len(content) < 1:
 		print(' -> 空、または読み込み失敗')
 		return []
-	content = content.replace(b'\x00', b'')
+	content   = content.replace(b'\x00', b'')
+	root, ext = os.path.splitext(file_path)
+	if ext[1:].lower() == 'aup':
+		# AviUtlでは連続する数字の短縮が行われる
+		for length in range(3,10):
+			for num in range(10):
+				content = re.sub(bytes([0x80+length])+bytes([0x30+num])+b'[\x01-\x79]', b'%d'%(num)*length, content)
 	content = re.sub(b'[\\x80-\\xff][^\\x2e]', b'_', content)
 	# 抽出する (ファイルパス)
 	if use_path:
 		path_list = re.findall(b'(?:\\w:)?(?:[\\\\/]{1,2}[^\\/\\\\:\\*\\?<>|\\n\\t\\x01-\\x1f]{1,127})+\\.[a-zA-Z0-9][-\\w]{1,10}[a-zA-Z0-9]', content)
 		content   = b'\n'.join(path_list)
-		root, ext = os.path.splitext(file_path)
-		if ext[1:].lower() == 'aup':
-			# AviUtlでは連続する数字の短縮が行われる
-			for length in range(3,10):
-				for num in range(10):
-					content = re.sub(bytes([0x80+length])+bytes([0x30+num])+b'[\x01-\x79]', b'%d'%(num)*length, content)
 	# 抽出する (ID直接検索)
 	id_list = re.findall(b'(?:[^a-zA-Z0-9]|^)((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', content)
 	id_list = list(set(id_list))
