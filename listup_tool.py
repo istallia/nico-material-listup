@@ -122,6 +122,6 @@ print('')
 for i in range(len(csv_list)):
 	csv_list[i] = ','.join(csv_list[i])
 csv_text = '\n'.join(csv_list)
-with open(base_path+'/IDs.csv', mode='w', encoding='cp932') as f:
+with open(base_path+'/IDs.csv', mode='w', encoding='cp932', errors="ignore") as f:
 	f.write(csv_text)
 input('Enterで終了:')
