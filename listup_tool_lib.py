@@ -29,10 +29,10 @@ def getIdList(file_path, use_path):
 		print(' -> 空、または読み込み失敗')
 		return []
 	content = content.replace(b'\x00', b'')
-	content = re.sub(b'[\\x80-\\xff].', b'_', content)
+	content = re.sub(b'[\\x80-\\xff][^\\x2e]', b'_', content)
 	# 抽出する (ファイルパス)
 	if use_path:
-		path_list = re.findall(b'(?:\\w:)?(?:[\\\\/][^\\/\\\\:\\*\\?<>|\\n\\t\\x01-\\x1f]{1,127})+\\.[-\\w]{1,12}', content)
+		path_list = re.findall(b'(?:\\w:)?(?:[\\\\/]{1,2}[^\\/\\\\:\\*\\?<>|\\n\\t\\x01-\\x1f]{1,127})+\\.[a-zA-Z0-9][-\\w]{1,10}[a-zA-Z0-9]', content)
 		content   = b'\n'.join(path_list)
 		root, ext = os.path.splitext(file_path)
 		if ext[1:].lower() == 'aup':
