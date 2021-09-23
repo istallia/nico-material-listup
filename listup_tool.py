@@ -54,6 +54,7 @@ else:
 for i in range(len(input_list)):
 	input_list[i] = os.path.abspath(input_list[i])
 input_list = list(set(input_list))
+base_path  = os.path.dirname(input_list[0])
 
 
 # --- すべてのファイル名を取得
@@ -75,7 +76,6 @@ for i in range(len(dir_list)):
 if len(file_list) < 1:
 	input('\n抽出可能なファイルが存在しません。Enterで終了します:')
 	sys.exit(0)
-base_path = os.path.dirname(file_list[0])
 
 
 # --- すべてのIDを取得
