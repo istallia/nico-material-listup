@@ -22,7 +22,15 @@ tool.checkUpdate()
 
 # --- 除外リストを作成
 exclude_csv_path = os.path.dirname(os.path.abspath(sys.argv[0])) + '/exclude_ext_list.txt'
-exclude_ext_list = ['lwi', 'avi', 'mp4', 'flv', 'mov', 'asf', 'mkv', 'webm', 'mpg', 'm2ts', 'mpg', 'mpeg', 'wav', 'mp3', 'ogg', 'wma', 'm4a', 'flac', 'aif', 'aiff', 'aac', 'mid', 'midi', 'jpg', 'jpe', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'psd', 'apd', 'ai', 'mdp', 'ico', 'zip', 'lzh', '7z', 'gz', 'tar', 'rar', 'exe', 'dll', 'msi', 'sys', 'iso', 'docx', 'dotx', 'xlsx', 'xlsm', 'pptx', 'pptm', 'potx', 'potm', 'db']
+exclude_ext_list = [
+	'lwi'  ,'avi'  ,'mp4'  ,'flv'  ,'mov' ,'asf'  ,'mkv'  ,'webm' ,'mpg'   ,'m2ts' ,
+	'mpg'  ,'mpeg' ,'wav'  ,'mp3'  ,'ogg' ,'wma'  ,'m4a'  ,'flac' ,'aif'   ,'aiff' ,
+	'aac'  ,'mid'  ,'midi' ,'jpg'  ,'jpe' ,'jpeg' ,'png'  ,'gif'  ,'bmp'   ,'webp' ,
+	'psd'  ,'apd'  ,'ai'   ,'mdp'  ,'ico' ,'zip'  ,'lzh'  ,'7z'   ,'gz'    ,'tar'  ,
+	'rar'  ,'exe'  ,'dll'  ,'msi'  ,'sys' ,'iso'  ,'docx' ,'dotx' ,'xlsx'  ,'xlsm' ,
+	'pptx' ,'pptm' ,'potx' ,'potm' ,'db'  ,'pdf'  ,'lnk'  ,'url'  ,'cache' ,'user' ,
+	'auf'  ,'auo'  ,'aui'  ,'bak'  ,'pdb' ,'sln'
+]
 if os.path.isfile(exclude_csv_path):
 	# 追加除外リストが存在すれば読み込む
 	content = ''
