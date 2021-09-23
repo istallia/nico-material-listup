@@ -107,10 +107,14 @@ def fetchMaterialInfo(id):
 			# 取得に失敗: ネットワークエラー
 			print(' -> 素材ページにアクセスできませんでした')
 			break
-		except IndexError:
+		except (IndexError, AttributeError):
 			# 取得に失敗: 指定要素がない
 			if i == max_retry-1:
 				print(' -> タイトルと投稿者の取得に失敗')
+		except Exception as e:
+			with open(os.path.dirname(os.path.abspath(sys.argv[0]))+'/error.log', mode='w', encoding='utf-8') as f:
+				f.write(e)
+			sys.exit(1)
 	# カンマは後で使うので置換
 	title   = title.replace(',', '，')
 	creator = creator.replace(',', '，')
