@@ -18,6 +18,7 @@ import listup_tool_lib as tool
 # --- タイトルを描画
 print('------ 「ニコニコ素材リストアップツール」'+tool.getVersion()+' by @is_ptcm ------\n')
 tool.checkUpdate()
+config = tool.readConfig()
 
 
 # --- 除外リストを作成
@@ -116,6 +117,13 @@ print('')
 for i in range(len(id_list)):
 	csv_list.append(tool.fetchMaterialInfo(id_list[i]))
 print('')
+
+
+# --- 取得したデータをクレジットテキストとして保存
+if 'credit-format' in config:
+	text = tool.generateCreditText(csv_list, config['credit-format'])
+	with open(base_path+'/credits.txt', mode='w', encoding='cp932', errors="ignore") as f:
+		f.write(text)
 
 
 # --- 取得したデータをcsvに保存

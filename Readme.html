@@ -1063,7 +1063,7 @@ body .markdown-body
 .highlight .vi{color:teal}
 .highlight .il{color:#009999}
 .highlight .gc{color:#999;background-color:#EAF2F5}
-</style><title>Readme</title></head><body><article class="markdown-body"><h1 id="v072">ニコニコ素材リストアップツール v0.7.2<a class="headerlink" href="#v072" title="Permanent link"></a></h1>
+</style><title>Readme</title></head><body><article class="markdown-body"><h1 id="v074">ニコニコ素材リストアップツール v0.7.4<a class="headerlink" href="#v074" title="Permanent link"></a></h1>
 <p>(2021-09-23)</p>
 <h2 id="_1">概要<a class="headerlink" href="#_1" title="Permanent link"></a></h2>
 <p>動画編集ソフトのプロジェクトファイル等からニコニコの素材のIDを抽出し、コンテンツツリーに登録しやすい10件ごとのリストにまとめるツールです。<br />
@@ -1092,7 +1092,16 @@ IDをまとめたテキストファイルやCSVファイルはプロジェクト
 </ul>
 <p>※ v0.5からのアップデートでいろいろ試みてはいますが、ID周辺のバイナリによっては誤検知したり、検出漏れが発生する可能性があります。<br />
 その場合は不具合のあったファイルor誤検知したIDの周辺のバイナリ情報(バイナリエディタのスクショ)をTwitterのDMなどに送ってくれれば対応します。</p>
-<h2 id="_5">誤検知対策: 除外拡張子リスト<a class="headerlink" href="#_5" title="Permanent link"></a></h2>
+<h2 id="_5">クレジットテキスト生成<a class="headerlink" href="#_5" title="Permanent link"></a></h2>
+<p>クレジットテキストを生成できます。クレジットテキストにはID、作品名、投稿者名、URLを含めることができます。<br />
+この機能を利用するには設定ファイル<code>config.txt</code>に<code>credit-format</code>という項目を設定してください。設定例は以下のとおりです。</p>
+<pre><code>credit-format = 【%id%】 %title% (%creator%)
+</code></pre>
+<p><code>%id%</code>、<code>%title%</code>、<code>%creator%</code>、<code>%url%</code>のところがそれぞれID、作品名、投稿者名、URLに置き換わります。</p>
+<p>※ 設定ファイルの文字エンコーディングは「cp932」または「sjis」でお願いします。
+※ 1作品のクレジットが2行以上となるクレジットテキストは生成できません。
+※ 作品種別ごとにまとめる機能はありません。</p>
+<h2 id="_6">誤検知対策: 除外拡張子リスト<a class="headerlink" href="#_6" title="Permanent link"></a></h2>
 <p>一部の拡張子は中身を読み込まないように設定されています。<br />
 ツールと同じフォルダに<code>exclude_ext_list.txt</code>を作成し、その中に除外したい拡張子を書き込んでおくと、追加でその拡張子も除外します。</p>
 <pre><code>lwi,  avi,  mp4,  flv,  mov, asf,  mkv,  webm, mpg,   m2ts,
@@ -1108,14 +1117,14 @@ auf,  auo,  aui,  bak,  pdb, sln
 ツールと同じフォルダに<code>2step_ext_list.txt</code>を作成し、その中に2段階抽出を利用したい拡張子を書き込んでおくと、追加でその拡張子も2段階抽出を利用します。</p>
 <pre><code>aup, pmm, emm
 </code></pre>
-<h2 id="_6">注意<a class="headerlink" href="#_6" title="Permanent link"></a></h2>
+<h2 id="_7">注意<a class="headerlink" href="#_7" title="Permanent link"></a></h2>
 <ul>
 <li>本ツールはニコニコ各サービスのWebサイトへアクセスします。多重起動するなど、むやみに負荷をかける行為はしないでください。</li>
 <li>ニコニ・コモンズ、静画、動画、立体に対応しています。それ以外の素材を前項の形式のファイル名で保存していたとしても抽出することはできません。</li>
 <li>既に削除されている素材の名前や作者を取得することはできません。</li>
 <li>「nc数字」「im数字」「sm数字」「td数字」を検出するため、このような文字列がテキストオブジェクト等に含まれると検出されてしまいます。仕様にしておくので活用したい場合は活用してください。</li>
 </ul>
-<h2 id="_7">クレジット<a class="headerlink" href="#_7" title="Permanent link"></a></h2>
+<h2 id="_8">クレジット<a class="headerlink" href="#_8" title="Permanent link"></a></h2>
 <p>制作者: イスターリャ(<a class="magiclink magiclink-github magiclink-mention" href="https://github.com/is_ptcm" title="GitHub User: is_ptcm">@is_ptcm</a>)<br />
 言語　: Python 3.8.2</p>
 <p>※本ツールの二次配布はご遠慮ください。</p></article></body></html>

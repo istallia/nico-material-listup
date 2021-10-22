@@ -3,7 +3,7 @@
 
 # 「ニコニコ素材リストアップツール ライブラリ」by @is_ptcm
 # メインスクリプトと関数をまとめたスクリプトを分けることにより可読性の向上を目指す
-VERSION = 'v0.7.3'
+VERSION = 'v0.7.4'
 
 
 # --- パッケージ読み込み
@@ -51,7 +51,10 @@ def getIdList(file_path, use_path):
 
 # --- IDリストの配列から10件ごとのテキストを生成
 def generateIdListText(id_list):
-	id_text = ''
+	# すべてのIDを1列にまとめる
+	id_text = '[1-line]\n' + ' '.join(id_list) + '\n'
+	# 10件ごとにまとめる
+	id_text += '\n[each-10-ids]\n'
 	if len(id_list) < 1:
 		return ''
 	for i in range(len(id_list)):
@@ -60,6 +63,14 @@ def generateIdListText(id_list):
 		else:
 			id_text = id_text + id_list[i] + ' '
 	return id_text[0:-1]
+
+
+# --- 取得したタイトルや投稿者などの情報からクレジットテキスト生成
+def generateCreditText(list_contents, text_format):
+	text_credit = ''
+	for content in list_contents:
+		text_credit += text_format.replace('%id%', content[0]).replace('%title%', content[1]).replace('%creator%', content[2]).replace('%url%', content[3]) + '\n'
+	return text_credit
 
 
 # --- 素材IDからID、タイトル、投稿者、URLの配列を取得
@@ -128,6 +139,23 @@ def fetchMaterialInfo(id):
 # --- バージョン取得
 def getVersion():
 	return VERSION
+
+
+# --- 設定ファイルを読み込み
+def readConfig():
+	path_config = os.path.dirname(os.path.abspath(sys.argv[0])) + '/config.txt'
+	text_config = []
+	list_config = {}
+	with open(path_config, mode='r', encoding='utf-8') as f:
+		text_config = f.read().replace('\r', '')
+		text_config = text_config.split('\n')
+	for i in range(len(text_config)):
+		if '=' in text_config[i]:
+			text_config[i]    = text_config[i].split('=')
+			text_config[i][0] = text_config[i][0].strip()
+			text_config[i][1] = text_config[i][1].strip()
+			list_config[text_config[i][0]] = text_config[i][1]
+	return list_config
 
 
 # --- 更新を確認(7日ごと)
