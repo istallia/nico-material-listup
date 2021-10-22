@@ -130,6 +130,16 @@ def getVersion():
 	return VERSION
 
 
+# --- 設定ファイルを読み込み
+def readConfig():
+	path_config = os.path.dirname(os.path.abspath(sys.argv[0])) + '/config.txt'
+	text_config = []
+	with open(path_config, mode='r', encoding='utf-8') as f:
+		text_config = f.read()
+		text_config = text_config.split('\n')
+	return text_config
+
+
 # --- 更新を確認(7日ごと)
 def checkUpdate():
 	# 最終確認日時(unix時間)を取得
