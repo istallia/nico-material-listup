@@ -51,7 +51,10 @@ def getIdList(file_path, use_path):
 
 # --- IDリストの配列から10件ごとのテキストを生成
 def generateIdListText(id_list):
-	id_text = ''
+	# すべてのIDを1列にまとめる
+	id_text = '[1-line]\n' + ' '.join(id_list) + '\n'
+	# 10件ごとにまとめる
+	id_text += '\n[each-10-ids]\n'
 	if len(id_list) < 1:
 		return ''
 	for i in range(len(id_list)):
