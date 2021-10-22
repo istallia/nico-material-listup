@@ -147,7 +147,7 @@ def readConfig():
 	text_config = []
 	list_config = {}
 	with open(path_config, mode='r', encoding='utf-8') as f:
-		text_config = f.read()
+		text_config = f.read().replace('\r', '')
 		text_config = text_config.split('\n')
 	for i in range(len(text_config)):
 		if '=' in text_config[i]:
