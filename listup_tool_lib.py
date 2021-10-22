@@ -134,14 +134,17 @@ def getVersion():
 def readConfig():
 	path_config = os.path.dirname(os.path.abspath(sys.argv[0])) + '/config.txt'
 	text_config = []
+	list_config = {}
 	with open(path_config, mode='r', encoding='utf-8') as f:
 		text_config = f.read()
 		text_config = text_config.split('\n')
 	for i in range(len(text_config)):
-		text_config[i] = text_config[i].split('=')
-		text_config[i][0] = text_config[i][0].strip()
-		text_config[i][1] = text_config[i][1].strip()
-	return text_config
+		if '=' in text_config[i]:
+			text_config[i]    = text_config[i].split('=')
+			text_config[i][0] = text_config[i][0].strip()
+			text_config[i][1] = text_config[i][1].strip()
+			list_config[text_config[i][0]] = text_config[i][1]
+	return list_config
 
 
 # --- 更新を確認(7日ごと)
