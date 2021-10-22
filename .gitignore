@@ -144,6 +144,8 @@ cython_debug/
 *.exa
 *.ccproj
 IDs.*
+credits.txt
+_version_check
 *.zip
 on.bat
 off.bat

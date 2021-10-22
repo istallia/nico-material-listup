@@ -122,7 +122,7 @@ print('')
 # --- 取得したデータをクレジットテキストとして保存
 if 'credit-format' in config:
 	text = tool.generateCreditText(csv_list, config['credit-format'])
-	with open(base_path+'/credits.csv', mode='w', encoding='cp932', errors="ignore") as f:
+	with open(base_path+'/credits.txt', mode='w', encoding='cp932', errors="ignore") as f:
 		f.write(text)
 
 
