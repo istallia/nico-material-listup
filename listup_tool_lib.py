@@ -65,6 +65,14 @@ def generateIdListText(id_list):
 	return id_text[0:-1]
 
 
+# --- 取得したタイトルや投稿者などの情報からクレジットテキスト生成
+def generateCreditText(list_contents, text_format):
+	text_credit = ''
+	for content in list_contents:
+		text_credit += text_format.replace('%id%', content[0]).replace('%title%', content[1]).replace('%creator%', content[2]).replace('%url%', content[3]) + '\n'
+	return text_credit
+
+
 # --- 素材IDからID、タイトル、投稿者、URLの配列を取得
 def fetchMaterialInfo(id):
 	# 素材種別からURLを作る
