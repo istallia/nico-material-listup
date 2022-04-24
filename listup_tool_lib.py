@@ -3,7 +3,7 @@
 
 # 「ニコニコ素材リストアップツール ライブラリ」by @is_ptcm
 # メインスクリプトと関数をまとめたスクリプトを分けることにより可読性の向上を目指す
-VERSION = 'v0.7.4'
+VERSION = 'v0.7.5'
 
 
 # --- パッケージ読み込み
@@ -146,6 +146,8 @@ def readConfig():
 	path_config = os.path.dirname(os.path.abspath(sys.argv[0])) + '/config.txt'
 	text_config = []
 	list_config = {}
+	if not os.path.isfile(path_config):
+		return list_config
 	with open(path_config, mode='r', encoding='utf-8') as f:
 		text_config = f.read().replace('\r', '')
 		text_config = text_config.split('\n')
