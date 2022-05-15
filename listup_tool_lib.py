@@ -24,13 +24,57 @@ html_template = '''\
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="./tool.css">
-	<script type="text/javascript" src="./tool.js"></script>
-	<title></title>
+	<style>
+		body {
+			margin     : 0.5rem auto;
+			max-width  : 1080px;
+		}
+		.ids-area {
+			margin : 1rem 0.5rem;
+		}
+		table {
+			border-collapse : collapse;
+			margin          : 0px auto;
+			width           : 100%;
+		}
+		td, th {
+			border : 1px solid #222;
+		}
+		.thumbnail {
+			max-height : 5rem;
+		}
+	</style>
+	<script type="text/javascript">
+		/* --- IDをリストアップ --- */
+		const generateIdList = () => {
+			const idSpan     = document.getElementById('id-list');
+			const checkboxes = [... document.getElementsByClassName('id-check')];
+			let idsText      = '';
+			checkboxes.forEach(box => {
+				if (box.checked) idsText += box.id + ' ';
+			});
+			idSpan.textContent = idsText;
+		};
+		document.addEventListener('DOMContentLoaded', () => {
+			generateIdList();
+			const checkboxes = [... document.getElementsByClassName('id-check')];
+			checkboxes.forEach(box => {
+				box.addEventListener('change', generateIdList);
+			});
+		});
+		/* --- IDをコピーする --- */
+		const copyIds = () => {
+			const idSpan = document.getElementById('id-list');
+			navigator.clipboard.writeText(idSpan.textContent);
+		};
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('copy-ids').addEventListener('click', copyIds);
+		});
+	</script>
 </head>
 <body>
-<div>
-	<button>IDリストをコピー</button> <span id="id-list"></span>
+<div class="ids-area">
+	<button id="copy-ids">IDリストをコピー</button> <span id="id-list"></span>
 </div>
 <table>
 	<thead>
@@ -109,12 +153,12 @@ def generateHTML(info_list):
 	content = ''
 	for info in info_list:
 		content += f'<tr>'
-		content += f'<td><input type="checkbox" id="{info["id"]}" checked="true"></td>'
+		content += f'<td><input type="checkbox" id="{info["id"]}" class="id-check" checked="true"></td>'
 		content += f'<td><a href="{info["URL"]}" target="_blank"><img src="{info["thumbnailURL"]}" class="thumbnail"></a></td>'
 		if len(info['audioURL']) < 1:
-			content += f'<td>{info["title"]}</td>'
+			content += f'<td>{info["id"]}<br>{info["title"]}</td>'
 		else:
-			content += f'<td>{info["title"]}<br><audio controls src="{info["audioURL"]}"></td>'
+			content += f'<td>{info["id"]}<br>{info["title"]}<br><audio controls src="{info["audioURL"]}"></td>'
 		content += f'<td>{info["username"]}</td>'
 		content += f'</tr>'
 	return html_template.replace('{content}', content)
