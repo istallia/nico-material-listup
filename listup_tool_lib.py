@@ -152,8 +152,11 @@ def generateCreditText(list_contents, text_format):
 def generateHTML(info_list):
 	content = ''
 	for info in info_list:
+		checked_attr = ' checked="true"'
+		if info['title'] == '削除された動画' or info['title'] == '(取得失敗)':
+			checked_attr = ''
 		content += f'<tr>'
-		content += f'<td><input type="checkbox" id="{info["id"]}" class="id-check" checked="true"></td>'
+		content += f'<td><input type="checkbox" id="{info["id"]}" class="id-check"{checked_attr}></td>'
 		content += f'<td><a href="{info["URL"]}" target="_blank"><img src="{info["thumbnailURL"]}" class="thumbnail"></a></td>'
 		if len(info['audioURL']) < 1:
 			content += f'<td>{info["id"]}<br>{info["title"]}</td>'
