@@ -3,7 +3,7 @@
 
 # 「ニコニコ素材リストアップツール ライブラリ」by @is_ptcm
 # メインスクリプトと関数をまとめたスクリプトを分けることにより可読性の向上を目指す
-VERSION = 'v0.7.5'
+VERSION = 'v0.8.0'
 
 
 # --- パッケージ読み込み
@@ -73,67 +73,54 @@ def generateCreditText(list_contents, text_format):
 	return text_credit
 
 
-# --- 素材IDからID、タイトル、投稿者、URLの配列を取得
+# --- 素材IDからID、タイトル、投稿者、サムネ、URLの配列を取得
 def fetchMaterialInfo(id):
+	# 返却用オブジェクトを生成
+	material_info = {
+		'id'           : id,
+		'title'        : '(取得失敗)',
+		'username'     : '(取得失敗)',
+		'thumbnailURL' : '',
+		'URL'          : '',
+		'isAudio'      : False
+	}
 	# 素材種別からURLを作る
 	head = id[:2]
-	url  = ''
 	print('+ '+id, end='')
 	if head == 'sm':
-		url = 'https://www.nicovideo.jp/watch/' + id
+		material_info['URL'] = 'https://www.nicovideo.jp/watch/' + id
 	elif head == 'im':
-		url = 'https://seiga.nicovideo.jp/seiga/' + id
+		material_info['URL'] = 'https://seiga.nicovideo.jp/seiga/' + id
 	elif head == 'nc':
-		url = 'https://commons.nicovideo.jp/material/' + id
+		material_info['URL'] = 'https://commons.nicovideo.jp/material/' + id
 	elif head == 'td':
-		url = 'https://3d.nicovideo.jp/works/' + id
-	# 必要な情報をスクレイピング
-	max_retry  = 3
-	is_success = False
-	title      = ''
-	creator    = ''
-	for i in range(max_retry):
-		try:
-			# html取得
-			html = urlopen(url).read()
-			soup = BeautifulSoup(html, 'html.parser')
-			# タイトルと投稿者を取得
-			if head == 'sm':
-				title   = soup.select_one('meta[name="twitter:title"]')['content']
-				creator = json.loads(soup.select_one('script[type="application/ld+json"]').string)
-				creator = creator['author']['name']
-			elif head == 'im':
-				title   = soup.select_one('ul.sg_pankuzu > li.active > span[itemprop="title"]').text
-				creator = soup.select_one('div.lg_txt_illust > strong').text
-			elif head == 'nc':
-				title   = soup.select_one('div.materialHeadTitle').text
-				creator = soup.select_one('div.mUserProfile a.materialUsername').text
-			elif head == 'td':
-				title   = soup.select_one('div.work-author-name').text
-				creator = soup.select_one('h1.work-info-title').text
-			print(' -> ' + title + ', ' + creator)
-			is_success = True
-			break
-		except urllib.error.HTTPError as e:
-			# 取得に失敗: ネットワークエラー
-			print(' -> 素材ページにアクセスできませんでした')
-			break
-		except (IndexError, AttributeError):
-			# 取得に失敗: 指定要素がない
-			if i == max_retry-1:
-				print(' -> タイトルと投稿者の取得に失敗')
-		except Exception as e:
-			with open(os.path.dirname(os.path.abspath(sys.argv[0]))+'/error.log', mode='w', encoding='utf-8') as f:
-				f.write(e)
-			sys.exit(1)
-	# カンマは後で使うので置換
-	title   = title.replace(',', '，')
-	creator = creator.replace(',', '，')
-	# 取得に成功していればその値を返す
-	if is_success:
-		return [id, title, creator, url]
-	else:
-		return [id, '(取得失敗)', '(取得失敗)', url]
+		material_info['URL'] = 'https://3d.nicovideo.jp/works/' + id
+	# 作品情報を取得
+	work_text = ''
+	work_info = []
+	try:
+		work_text = urlopen(f'https://public-api.commons.nicovideo.jp/v1/tree/node/{id}?with_meta=1').read()
+		work_info = json.loads(work_text)
+	except (json.decoder.JSONDecodeError, urllib.error.URLError):
+		print(' -> 作品情報の取得に失敗')
+		return material_info
+	work_info                     = work_info['data']['node']
+	material_info['title']        = work_info['title']
+	material_info['thumbnailURL'] = work_info['thumbnailURL']
+	material_info['isAudio']      = (work_info['contentKind'] == 'commons' and work_info['commonsMaterialKind'] == 'audio')
+	# ユーザー情報を取得
+	user_text = ''
+	user_info = []
+	try:
+		user_text = urlopen(f'https://account.nicovideo.jp/api/public/v1/users/{work_info["userId"]}.json').read()
+		user_info = json.loads(user_text)
+	except (json.decoder.JSONDecodeError, urllib.error.URLError):
+		print(' -> ユーザー情報の取得に失敗')
+		return material_info
+	user_info                 = user_info['data']
+	material_info['username'] = user_info['nickname']
+	print(f' -> {material_info["title"]} by {material_info["username"]}')
+	return material_info
 
 
 # --- バージョン取得
