@@ -12,6 +12,7 @@ import os.path
 import sys
 import re
 import glob
+import copy
 import listup_tool_lib as tool
 
 
@@ -111,11 +112,19 @@ if not confirm == 'y' and not confirm == 'Y':
 
 
 # --- IDリストからタイトルと投稿者を取得
-csv_list = []
-csv_text = ''
+info_list = []
+csv_list  = []
+csv_text  = ''
 print('')
 for i in range(len(id_list)):
-	csv_list.append(tool.fetchMaterialInfo(id_list[i]))
+	material_info = tool.fetchMaterialInfo(id_list[i])
+	info_list.append(material_info)
+	csv_list.append([
+		material_info['id'],
+		material_info['title'],
+		material_info['username'],
+		material_info['URL']
+	])
 print('')
 
 
@@ -124,6 +133,13 @@ if 'credit-format' in config:
 	text = tool.generateCreditText(csv_list, config['credit-format'])
 	with open(base_path+'/credits.txt', mode='w', encoding='cp932', errors="ignore") as f:
 		f.write(text)
+
+
+# 取得したデータをHTMLとして保存
+if 'export-html' in config and config['export-html'].lower() == 'true':
+	html = tool.generateHTML(info_list)
+	with open(base_path+'/credits.html', mode='w', encoding='utf-8', errors="ignore") as f:
+		f.write(html)
 
 
 # --- 取得したデータをcsvに保存

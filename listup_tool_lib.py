@@ -3,7 +3,7 @@
 
 # 「ニコニコ素材リストアップツール ライブラリ」by @is_ptcm
 # メインスクリプトと関数をまとめたスクリプトを分けることにより可読性の向上を目指す
-VERSION = 'v0.7.5'
+VERSION = 'v0.8.0'
 
 
 # --- パッケージ読み込み
@@ -15,6 +15,81 @@ import re
 import urllib
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+
+
+# --- エクスポート用HTMLテンプレの定義
+html_template = '''\
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body {
+			margin     : 0.5rem auto;
+			max-width  : 1080px;
+		}
+		.ids-area {
+			margin : 1rem 0.5rem;
+		}
+		table {
+			border-collapse : collapse;
+			margin          : 0px auto;
+			width           : 100%;
+		}
+		td, th {
+			border : 1px solid #222;
+		}
+		.thumbnail {
+			max-height : 5rem;
+		}
+	</style>
+	<script type="text/javascript">
+		/* --- IDをリストアップ --- */
+		const generateIdList = () => {
+			const idSpan     = document.getElementById('id-list');
+			const checkboxes = [... document.getElementsByClassName('id-check')];
+			let idsText      = '';
+			checkboxes.forEach(box => {
+				if (box.checked) idsText += box.id + ' ';
+			});
+			idSpan.textContent = idsText;
+		};
+		document.addEventListener('DOMContentLoaded', () => {
+			generateIdList();
+			const checkboxes = [... document.getElementsByClassName('id-check')];
+			checkboxes.forEach(box => {
+				box.addEventListener('change', generateIdList);
+			});
+		});
+		/* --- IDをコピーする --- */
+		const copyIds = () => {
+			const idSpan = document.getElementById('id-list');
+			navigator.clipboard.writeText(idSpan.textContent);
+		};
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('copy-ids').addEventListener('click', copyIds);
+		});
+	</script>
+</head>
+<body>
+<div class="ids-area">
+	<button id="copy-ids">IDリストをコピー</button> <span id="id-list"></span>
+</div>
+<table>
+	<thead>
+		<tr>
+			<th>■</th>
+			<th>サムネイル</th>
+			<th>タイトル</th>
+			<th>投稿者</th>
+		</tr>
+	</thead>
+	<tbody>{content}</tbody>
+</table>
+</body>
+</html>\
+'''
 
 
 # --- ファイルからIDを抽出
@@ -73,67 +148,74 @@ def generateCreditText(list_contents, text_format):
 	return text_credit
 
 
-# --- 素材IDからID、タイトル、投稿者、URLの配列を取得
+# --- HTMLを生成
+def generateHTML(info_list):
+	content = ''
+	for info in info_list:
+		checked_attr = ' checked="true"'
+		if info['title'] == '削除された動画' or info['title'] == '(取得失敗)':
+			checked_attr = ''
+		content += f'<tr>'
+		content += f'<td><input type="checkbox" id="{info["id"]}" class="id-check"{checked_attr}></td>'
+		content += f'<td><a href="{info["URL"]}" target="_blank"><img src="{info["thumbnailURL"]}" class="thumbnail"></a></td>'
+		if len(info['audioURL']) < 1:
+			content += f'<td>{info["id"]}<br>{info["title"]}</td>'
+		else:
+			content += f'<td>{info["id"]}<br>{info["title"]}<br><audio controls src="{info["audioURL"]}"></td>'
+		content += f'<td>{info["username"]}</td>'
+		content += f'</tr>'
+	return html_template.replace('{content}', content)
+
+
+# --- 素材IDからID、タイトル、投稿者、サムネ、URLの配列を取得
 def fetchMaterialInfo(id):
+	# 返却用オブジェクトを生成
+	material_info = {
+		'id'           : id,
+		'title'        : '(取得失敗)',
+		'username'     : '(取得失敗)',
+		'thumbnailURL' : '',
+		'URL'          : '',
+		'audioURL'     : ''
+	}
 	# 素材種別からURLを作る
 	head = id[:2]
-	url  = ''
 	print('+ '+id, end='')
 	if head == 'sm':
-		url = 'https://www.nicovideo.jp/watch/' + id
+		material_info['URL'] = 'https://www.nicovideo.jp/watch/' + id
 	elif head == 'im':
-		url = 'https://seiga.nicovideo.jp/seiga/' + id
+		material_info['URL'] = 'https://seiga.nicovideo.jp/seiga/' + id
 	elif head == 'nc':
-		url = 'https://commons.nicovideo.jp/material/' + id
+		material_info['URL'] = 'https://commons.nicovideo.jp/material/' + id
 	elif head == 'td':
-		url = 'https://3d.nicovideo.jp/works/' + id
-	# 必要な情報をスクレイピング
-	max_retry  = 3
-	is_success = False
-	title      = ''
-	creator    = ''
-	for i in range(max_retry):
-		try:
-			# html取得
-			html = urlopen(url).read()
-			soup = BeautifulSoup(html, 'html.parser')
-			# タイトルと投稿者を取得
-			if head == 'sm':
-				title   = soup.select_one('meta[name="twitter:title"]')['content']
-				creator = json.loads(soup.select_one('script[type="application/ld+json"]').string)
-				creator = creator['author']['name']
-			elif head == 'im':
-				title   = soup.select_one('ul.sg_pankuzu > li.active > span[itemprop="title"]').text
-				creator = soup.select_one('div.lg_txt_illust > strong').text
-			elif head == 'nc':
-				title   = soup.select_one('div.materialHeadTitle').text
-				creator = soup.select_one('div.mUserProfile a.materialUsername').text
-			elif head == 'td':
-				title   = soup.select_one('div.work-author-name').text
-				creator = soup.select_one('h1.work-info-title').text
-			print(' -> ' + title + ', ' + creator)
-			is_success = True
-			break
-		except urllib.error.HTTPError as e:
-			# 取得に失敗: ネットワークエラー
-			print(' -> 素材ページにアクセスできませんでした')
-			break
-		except (IndexError, AttributeError):
-			# 取得に失敗: 指定要素がない
-			if i == max_retry-1:
-				print(' -> タイトルと投稿者の取得に失敗')
-		except Exception as e:
-			with open(os.path.dirname(os.path.abspath(sys.argv[0]))+'/error.log', mode='w', encoding='utf-8') as f:
-				f.write(e)
-			sys.exit(1)
-	# カンマは後で使うので置換
-	title   = title.replace(',', '，')
-	creator = creator.replace(',', '，')
-	# 取得に成功していればその値を返す
-	if is_success:
-		return [id, title, creator, url]
-	else:
-		return [id, '(取得失敗)', '(取得失敗)', url]
+		material_info['URL'] = 'https://3d.nicovideo.jp/works/' + id
+	# 作品情報を取得
+	work_text = ''
+	work_info = []
+	try:
+		work_text = urlopen(f'https://public-api.commons.nicovideo.jp/v1/tree/node/{id}?with_meta=1').read()
+		work_info = json.loads(work_text)
+	except (json.decoder.JSONDecodeError, urllib.error.URLError):
+		print(' -> 作品情報の取得に失敗')
+		return material_info
+	work_info                     = work_info['data']['node']
+	material_info['title']        = work_info['title']
+	material_info['thumbnailURL'] = work_info['thumbnailURL'].replace('size=l', 'size=s')
+	if work_info['contentKind'] == 'commons' and work_info['commonsMaterialKind'] == 'audio':
+		material_info['audioURL'] = f'https://commons.nicovideo.jp/api/preview/get?cid={id.replace("nc","")}'
+	# ユーザー情報を取得
+	user_text = ''
+	user_info = []
+	try:
+		user_text = urlopen(f'https://account.nicovideo.jp/api/public/v1/users/{work_info["userId"]}.json').read()
+		user_info = json.loads(user_text)
+	except (json.decoder.JSONDecodeError, urllib.error.URLError):
+		print(' -> ユーザー情報の取得に失敗')
+		return material_info
+	user_info                 = user_info['data']
+	material_info['username'] = user_info['nickname']
+	print(f' -> {material_info["title"]} by {material_info["username"]}')
+	return material_info
 
 
 # --- バージョン取得
