@@ -82,7 +82,7 @@ def fetchMaterialInfo(id):
 		'username'     : '(取得失敗)',
 		'thumbnailURL' : '',
 		'URL'          : '',
-		'isAudio'      : False
+		'audioURL'     : ''
 	}
 	# 素材種別からURLを作る
 	head = id[:2]
@@ -107,7 +107,8 @@ def fetchMaterialInfo(id):
 	work_info                     = work_info['data']['node']
 	material_info['title']        = work_info['title']
 	material_info['thumbnailURL'] = work_info['thumbnailURL']
-	material_info['isAudio']      = (work_info['contentKind'] == 'commons' and work_info['commonsMaterialKind'] == 'audio')
+	if work_info['contentKind'] == 'commons' and work_info['commonsMaterialKind'] == 'audio':
+		material_info['audioURL'] = f'https://commons.nicovideo.jp/api/preview/get?cid={id.replace("nc","")}'
 	# ユーザー情報を取得
 	user_text = ''
 	user_info = []
