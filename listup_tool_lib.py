@@ -17,6 +17,37 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 
+# --- エクスポート用HTMLテンプレの定義
+html_template = '''\
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="./tool.css">
+	<script type="text/javascript" src="./tool.js"></script>
+	<title></title>
+</head>
+<body>
+<div>
+	<button>IDリストをコピー</button> <span id="id-list"></span>
+</div>
+<table>
+	<thead>
+		<tr>
+			<th>■</th>
+			<th>サムネイル</th>
+			<th>タイトル</th>
+			<th>投稿者</th>
+		</tr>
+	</thead>
+	<tbody>{content}</tbody>
+</table>
+</body>
+</html>\
+'''
+
+
 # --- ファイルからIDを抽出
 def getIdList(file_path, use_path):
 	# 下準備
@@ -73,6 +104,22 @@ def generateCreditText(list_contents, text_format):
 	return text_credit
 
 
+# --- HTMLを生成
+def generateHTML(info_list):
+	content = ''
+	for info in info_list:
+		content += f'<tr>'
+		content += f'<td><input type="checkbox" id="{info["id"]}" checked="true"></td>'
+		content += f'<td><a href="{info["URL"]}" target="_blank"><img src="{info["thumbnailURL"]}" class="thumbnail"></a></td>'
+		if len(info['audioURL']) < 1:
+			content += f'<td>{info["title"]}</td>'
+		else:
+			content += f'<td>{info["title"]}<br><audio controls src="{info["audioURL"]}"></td>'
+		content += f'<td>{info["username"]}</td>'
+		content += f'</tr>'
+	return html_template.replace('{content}', content)
+
+
 # --- 素材IDからID、タイトル、投稿者、サムネ、URLの配列を取得
 def fetchMaterialInfo(id):
 	# 返却用オブジェクトを生成
@@ -106,7 +153,7 @@ def fetchMaterialInfo(id):
 		return material_info
 	work_info                     = work_info['data']['node']
 	material_info['title']        = work_info['title']
-	material_info['thumbnailURL'] = work_info['thumbnailURL']
+	material_info['thumbnailURL'] = work_info['thumbnailURL'].replace('size=l', 'size=s')
 	if work_info['contentKind'] == 'commons' and work_info['commonsMaterialKind'] == 'audio':
 		material_info['audioURL'] = f'https://commons.nicovideo.jp/api/preview/get?cid={id.replace("nc","")}'
 	# ユーザー情報を取得

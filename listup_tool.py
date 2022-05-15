@@ -135,6 +135,13 @@ if 'credit-format' in config:
 		f.write(text)
 
 
+# 取得したデータをHTMLとして保存
+if 'export-html' in config and config['export-html'].lower() == 'true':
+	html = tool.generateHTML(info_list)
+	with open(base_path+'/credits.html', mode='w', encoding='utf-8', errors="ignore") as f:
+		f.write(html)
+
+
 # --- 取得したデータをcsvに保存
 for i in range(len(csv_list)):
 	csv_list[i] = ','.join(csv_list[i])
