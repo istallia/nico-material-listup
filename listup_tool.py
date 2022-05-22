@@ -19,10 +19,10 @@ import listup_tool_lib as tool
 # --- タイトルを描画
 print('------ 「ニコニコ素材リストアップツール」'+tool.getVersion()+' by @is_ptcm ------\n')
 config = tool.readConfig()
-if 'check-update' in config and config['check-update'].lower() == 'true':
-	tool.checkUpdate()
-else:
+if 'check-update' in config and config['check-update'].lower() != 'true':
 	print('\nアップデートチェッカは無効化されています。\n')
+else:
+	tool.checkUpdate()
 
 
 # --- 除外リストを作成
