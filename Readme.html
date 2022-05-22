@@ -1063,8 +1063,8 @@ body .markdown-body
 .highlight .vi{color:teal}
 .highlight .il{color:#009999}
 .highlight .gc{color:#999;background-color:#EAF2F5}
-</style><title>Readme</title></head><body><article class="markdown-body"><h1 id="v080">ニコニコ素材リストアップツール v0.8.0<a class="headerlink" href="#v080" title="Permanent link"></a></h1>
-<p>(2022-05-15)</p>
+</style><title>Readme</title></head><body><article class="markdown-body"><h1 id="v081">ニコニコ素材リストアップツール v0.8.1<a class="headerlink" href="#v081" title="Permanent link"></a></h1>
+<p>(2022-05-22)</p>
 <h2 id="_1">概要<a class="headerlink" href="#_1" title="Permanent link"></a></h2>
 <p>動画編集ソフトのプロジェクトファイル等からニコニコの素材のIDを抽出し、コンテンツツリーに登録しやすい10件ごとのリストにまとめるツールです。<br />
 元々はAviUtlとRecotteStudio用でしたが、仕組み的にどのソフトでもいけそうだったので内部でやってた制限を取っ払いました。<br />
@@ -1128,7 +1128,13 @@ auf,  auo,  aui,  bak,  pdb, sln
 ツールと同じフォルダに<code>2step_ext_list.txt</code>を作成し、その中に2段階抽出を利用したい拡張子を書き込んでおくと、追加でその拡張子も2段階抽出を利用します。</p>
 <pre><code>aup, pmm, emm
 </code></pre>
-<h2 id="_7">注意<a class="headerlink" href="#_7" title="Permanent link"></a></h2>
+<h2 id="_7">更新確認<a class="headerlink" href="#_7" title="Permanent link"></a></h2>
+<p>最短で1週間ごとにプロフページと通信し、新しいバージョンがないか確認します。最新バージョンが見つかればコンソールでお知らせします。<br />
+この機能はconfig.txtで無効化できます。</p>
+<pre><code>check-update = False
+</code></pre>
+<p>Trueで有効、Falseで無効です。書かれていない/設定ファイルがない場合は有効扱いになります。</p>
+<h2 id="_8">注意<a class="headerlink" href="#_8" title="Permanent link"></a></h2>
 <ul>
 <li>本ツールはニコニコ各サービスのWebサイトへアクセスします。多重起動するなど、むやみに負荷をかける行為はしないでください。</li>
 <li>ニコニ・コモンズ、静画、動画、立体に対応しています。それ以外の素材を前項の形式のファイル名で保存していたとしても抽出することはできません。</li>
@@ -1138,11 +1144,11 @@ auf,  auo,  aui,  bak,  pdb, sln
 </ul>
 </li>
 </ul>
-<h2 id="_8">ビルド方法<a class="headerlink" href="#_8" title="Permanent link"></a></h2>
+<h2 id="_9">ビルド方法<a class="headerlink" href="#_9" title="Permanent link"></a></h2>
 <p>pyinstallerで固めるだけです。アイコンは<a href="https://iconmonstr.com/file-27-svg/">iconmonstr</a>さんのものを使用しています。<br />
 リポジトリのルートディレクトリに移動して以下を実行してください。</p>
 <pre><code>pyinstaller -F --clean --noupx listup_tool.py --icon iconmonstr-file-27-240.ico
 </code></pre>
-<h2 id="_9">クレジット<a class="headerlink" href="#_9" title="Permanent link"></a></h2>
+<h2 id="_10">クレジット<a class="headerlink" href="#_10" title="Permanent link"></a></h2>
 <p>制作者: イスターリャ(<a class="magiclink magiclink-github magiclink-mention" href="https://github.com/is_ptcm" title="GitHub User: is_ptcm">@is_ptcm</a>)<br />
 言語　: Python 3.8.2</p></article></body></html>

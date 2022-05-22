@@ -1,2 +1,3 @@
 credit-format = 【%id%】 %title% (%creator%)
 export-html   = False
+check-update  = True
