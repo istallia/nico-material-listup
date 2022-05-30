@@ -1,3 +1,4 @@
-credit-format = 【%id%】 %title% (%creator%)
-export-html   = False
-check-update  = True
+credit-format  = 【%id%】 %title% (%creator%)
+overwrite-mode = overwrite
+export-html    = False
+check-update   = True

@@ -24,6 +24,7 @@
 
 # --- パッケージ読み込み
 import os.path
+import datetime
 import sys
 import re
 import glob
@@ -119,13 +120,34 @@ id_list = list(set(id_list))
 print('+ 合計' + str(len(id_list)) + '件のIDを抽出\n')
 
 
+# --- 同名ファイルがあるか確認
+postfix = ''
+if 'overwrite-mode' in config and config['overwrite-mode'] == 'datetime':
+	now     = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
+	postfix = '-' + now.strftime('%Y%m%d-%H%M%S')
+if 'overwrite-mode' in config and tool.checkDuplicatedFile(base_path):
+	if config['overwrite-mode'] == 'number':
+		postfix_candidate = ''
+		for i in range(1000):
+			postfix_candidate = f' ({i+1})'
+			if not tool.checkDuplicatedFile(base_path, postfix_candidate):
+				break
+		if len(postfix_candidate) > 0:
+			postfix = postfix_candidate
+		else:
+			config['overwrite-mode'] = 'confirm'
+	if config['overwrite-mode'] == 'confirm':
+		confirm_overwrite = input('同名のファイルがあります。上書きしますか？ [y/N(Enter)] ').strip()
+		if confirm_overwrite.lower() != 'y':
+			sys.exit(0)
+
 
 # --- IDリストを保存し、さらにタイトルや投稿者も取得するか確認する
 id_text = tool.generateIdListText(id_list)
-with open(base_path+'/IDs.txt', mode='w', encoding='cp932') as f:
+with open(base_path+f'/IDs{postfix}.txt', mode='w', encoding='cp932') as f:
 	f.write(id_text)
 confirm = input('オンラインでタイトルと投稿者を取得しますか？結果はCSV形式で保存されます[y/N(Enter)] ').strip()
-if not confirm == 'y' and not confirm == 'Y':
+if not confirm.lower() == 'y':
 	sys.exit(0)
 
 
@@ -149,14 +171,14 @@ print('')
 # --- 取得したデータをクレジットテキストとして保存
 if 'credit-format' in config:
 	text = tool.generateCreditText(csv_list, config['credit-format'])
-	with open(base_path+'/credits.txt', mode='w', encoding='cp932', errors="ignore") as f:
+	with open(base_path+f'/credits{postfix}.txt', mode='w', encoding='cp932', errors="ignore") as f:
 		f.write(text)
 
 
 # 取得したデータをHTMLとして保存
 if 'export-html' in config and config['export-html'].lower() == 'true':
 	html = tool.generateHTML(info_list)
-	with open(base_path+'/credits.html', mode='w', encoding='utf-8', errors="ignore") as f:
+	with open(base_path+f'/credits{postfix}.html', mode='w', encoding='utf-8', errors="ignore") as f:
 		f.write(html)
 
 
@@ -164,6 +186,6 @@ if 'export-html' in config and config['export-html'].lower() == 'true':
 for i in range(len(csv_list)):
 	csv_list[i] = ','.join(csv_list[i])
 csv_text = '\n'.join(csv_list)
-with open(base_path+'/IDs.csv', mode='w', encoding='cp932', errors="ignore") as f:
+with open(base_path+f'/IDs{postfix}.csv', mode='w', encoding='cp932', errors="ignore") as f:
 	f.write(csv_text)
 input('Enterで終了:')

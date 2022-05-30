@@ -1,6 +1,5 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>body {
   max-width: 980px;
-  border: 1px solid #ddd;
   outline: 1300px solid #fff;
   margin: 16px auto;
 }
@@ -899,6 +898,10 @@ body .markdown-body
   vertical-align: middle;
 }
 
+.markdown-body diagram-div, .markdown-body div.uml-sequence-diagram, .markdown-body, div.uml-flowchart {
+  overflow: auto;
+}
+
 /* Media */
 @media only screen and (min-width: 480px) {
   .markdown-body {
@@ -1144,11 +1147,42 @@ auf,  auo,  aui,  bak,  pdb, sln
 </ul>
 </li>
 </ul>
-<h2 id="_9">ビルド方法<a class="headerlink" href="#_9" title="Permanent link"></a></h2>
+<h2 id="_9">ファイルの上書きについて<a class="headerlink" href="#_9" title="Permanent link"></a></h2>
+<p>デフォルト設定では、ファイル名は固定で、同じフォルダで抽出を行うと確認なしに上書きされます。<br />
+config.txtで既にファイルがあった場合の挙動を変更することができます。</p>
+<pre><code>overwrite-mode = confirm
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>値</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>overwrite</td>
+<td>デフォルト設定。確認なしで上書きする。</td>
+</tr>
+<tr>
+<td>confirm</td>
+<td>同名のファイルがあれば確認する。</td>
+</tr>
+<tr>
+<td>datetime</td>
+<td>常にファイル名に日時を付与する。</td>
+</tr>
+<tr>
+<td>number</td>
+<td>同名のファイルがあれば連番を付与する。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_10">ビルド方法<a class="headerlink" href="#_10" title="Permanent link"></a></h2>
 <p>pyinstallerで固めるだけです。アイコンは<a href="https://iconmonstr.com/file-27-svg/">iconmonstr</a>さんのものを使用しています。<br />
 リポジトリのルートディレクトリに移動して以下を実行してください。</p>
 <pre><code>pyinstaller -F --clean --noupx listup_tool.py --icon iconmonstr-file-27-240.ico
 </code></pre>
-<h2 id="_10">クレジット<a class="headerlink" href="#_10" title="Permanent link"></a></h2>
+<h2 id="_11">クレジット<a class="headerlink" href="#_11" title="Permanent link"></a></h2>
 <p>制作者: イスターリャ(<a class="magiclink magiclink-github magiclink-mention" href="https://github.com/is_ptcm" title="GitHub User: is_ptcm">@is_ptcm</a>)<br />
 言語　: Python 3.8.2</p></article></body></html>

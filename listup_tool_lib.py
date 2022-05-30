@@ -289,3 +289,17 @@ def checkUpdate():
 	with open(file_name, mode='w', encoding='ascii') as f:
 		f.write(str(current_time))
 	return
+
+
+# --- ファイル名重複をチェック
+def checkDuplicatedFile(dirname, postfix = ''):
+	filenames = [
+		os.path.abspath(dirname + f'/Ids{postfix}.txt'),
+		os.path.abspath(dirname + f'/IDs{postfix}.csv'),
+		os.path.abspath(dirname + f'/credits{postfix}.txt'),
+		os.path.abspath(dirname + f'/credits{postfix}.html')
+	]
+	for name in filenames:
+		if os.path.isfile(name):
+			return True
+	return False
