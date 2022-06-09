@@ -55,6 +55,10 @@ html_template = '''\
 		td, th {
 			border : 1px solid #222;
 		}
+		td:nth-child(1), td > input[type="checkbox"] { cursor : pointer; }
+		td:nth-child(-n+2) {
+			text-align : center;
+		}
 		.thumbnail {
 			max-height : 5rem;
 		}
@@ -75,6 +79,11 @@ html_template = '''\
 			const checkboxes = [... document.getElementsByClassName('id-check')];
 			checkboxes.forEach(box => {
 				box.addEventListener('change', generateIdList);
+				box.parentNode.addEventListener('click', event => {
+					if (event.target.tagName.toLowerCase() !== 'td') return;
+					event.currentTarget.children[0].checked = !event.currentTarget.children[0].checked;
+					generateIdList();
+				});
 			});
 		});
 		/* --- IDをコピーする --- */
