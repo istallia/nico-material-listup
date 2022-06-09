@@ -60,7 +60,7 @@ html_template = '''\
 			text-align : center;
 		}
 		.thumbnail {
-			max-height : 5rem;
+			max-height : 6rem;
 		}
 	</style>
 	<script type="text/javascript">
@@ -186,7 +186,17 @@ def generateHTML(info_list):
 			content += f'<td>{info["id"]}<br>{info["title"]}</td>'
 		else:
 			content += f'<td>{info["id"]}<br>{info["title"]}<br><audio controls src="{info["audioURL"]}"></td>'
-		content += f'<td>{info["username"]}</td>'
+		if len(info['userID']) < 1:
+			content += f'<td>{info["username"]}</td>'
+		else:
+			if info['id'].startswith('nc'):
+				content += f'<td><a href="https://commons.nicovideo.jp/users/{info["userID"]}?ref=listup-tool" target="_blank">{info["username"]}</a></td>'
+			elif info['id'].startswith('im'):
+				content += f'<td><a href="https://seiga.nicovideo.jp/user/illust/{info["userID"]}?ref=listup-tool" target="_blank">{info["username"]}</a></td>'
+			elif info['id'].startswith('td'):
+				content += f'<td><a href="https://3d.nicovideo.jp/users/{info["userID"]}?ref=listup-tool" target="_blank">{info["username"]}</a></td>'
+			else:
+				content += f'<td><a href="https://www.nicovideo.jp/user/{info["userID"]}?ref=listup-tool" target="_blank">{info["username"]}</a></td>'
 		content += f'</tr>'
 	return html_template.replace('{content}', content)
 
@@ -198,6 +208,7 @@ def fetchMaterialInfo(id):
 		'id'           : id,
 		'title'        : '(取得失敗)',
 		'username'     : '(取得失敗)',
+		'userID'       : '',
 		'thumbnailURL' : '',
 		'URL'          : '',
 		'audioURL'     : ''
@@ -224,6 +235,7 @@ def fetchMaterialInfo(id):
 		return material_info
 	work_info                     = work_info['data']['node']
 	material_info['title']        = work_info['title']
+	material_info['userID']       = str(work_info['userId'])
 	material_info['thumbnailURL'] = work_info['thumbnailURL'].replace('size=l', 'size=s')
 	if work_info['contentKind'] == 'commons' and work_info['commonsMaterialKind'] == 'audio':
 		material_info['audioURL'] = f'https://commons.nicovideo.jp/api/preview/get?cid={id.replace("nc","")}'
