@@ -43,9 +43,17 @@ html_template = '''\
 		body {
 			margin     : 0.5rem auto;
 			max-width  : 1080px;
+			overflow-x : hidden;
 		}
 		.ids-area {
-			margin : 1rem 0.5rem;
+			margin      : 1rem 0.5rem;
+			white-space : nowrap;
+		}
+		.ids-area #id-list {
+			max-width     : 1080px;
+			text-overflow : ellipsis;
+			display       : inline-block;
+			overflow-x    : hidden;
 		}
 		table {
 			border-collapse : collapse;
@@ -67,12 +75,14 @@ html_template = '''\
 		/* --- IDをリストアップ --- */
 		const generateIdList = () => {
 			const idSpan     = document.getElementById('id-list');
+			const lastHeight = idSpan.offsetHeight;
 			const checkboxes = [... document.getElementsByClassName('id-check')];
 			let idsText      = '';
 			checkboxes.forEach(box => {
 				if (box.checked) idsText += box.id + ' ';
 			});
 			idSpan.textContent = idsText;
+			window.scrollBy(0, idSpan.offsetHeight-lastHeight);
 		};
 		document.addEventListener('DOMContentLoaded', () => {
 			generateIdList();
@@ -98,7 +108,7 @@ html_template = '''\
 </head>
 <body>
 <div class="ids-area">
-	<button id="copy-ids">IDリストをコピー</button> <span id="id-list"></span>
+	<button id="copy-ids">IDリストをコピー</button><br><span id="id-list"></span>
 </div>
 <table>
 	<thead>
