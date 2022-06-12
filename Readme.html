@@ -1066,8 +1066,8 @@ body .markdown-body
 .highlight .vi{color:teal}
 .highlight .il{color:#009999}
 .highlight .gc{color:#999;background-color:#EAF2F5}
-</style><title>Readme</title></head><body><article class="markdown-body"><h1 id="v081">ニコニコ素材リストアップツール v0.8.1<a class="headerlink" href="#v081" title="Permanent link"></a></h1>
-<p>(2022-05-30)</p>
+</style><title>Readme</title></head><body><article class="markdown-body"><h1 id="v082">ニコニコ素材リストアップツール v0.8.2<a class="headerlink" href="#v082" title="Permanent link"></a></h1>
+<p>(2022-06-12)</p>
 <h2 id="_1">概要<a class="headerlink" href="#_1" title="Permanent link"></a></h2>
 <p>動画編集ソフトのプロジェクトファイル等からニコニコの素材のIDを抽出し、コンテンツツリーに登録しやすい10件ごとのリストにまとめるツールです。<br />
 元々はAviUtlとRecotteStudio用でしたが、仕組み的にどのソフトでもいけそうだったので内部でやってた制限を取っ払いました。<br />
@@ -1109,7 +1109,7 @@ body .markdown-body
 ※ 作品種別ごとにまとめる機能はありません。</p>
 <h1 id="html">HTML生成<a class="headerlink" href="#html" title="Permanent link"></a></h1>
 <p>使用作品を表にまとめたHTMLを生成できます。HTMLではサムネイル、作品ID、タイトル、投稿者名を確認できます。<br />
-サムネイルをクリックすると作品ページに飛ぶことができます。<br />
+サムネイルをクリックすると作品ページに飛ぶことができます。投稿者名をクリックすると投稿者のマイページに飛ぶことができます。<br />
 また、上部のボタンとチェックボックスを活用することで、選択した作品のみのIDリストをコピーすることができます。</p>
 <p>この機能を利用するには、設定ファイル<code>config.txt</code>に<code>export-html</code>という項目を追加してください。設定例は以下のとおりです。</p>
 <pre><code>export-html = True
@@ -1132,7 +1132,7 @@ auf,  auo,  aui,  bak,  pdb, sln
 <pre><code>aup, pmm, emm
 </code></pre>
 <h2 id="_7">更新確認<a class="headerlink" href="#_7" title="Permanent link"></a></h2>
-<p>最短で1週間ごとにプロフページと通信し、新しいバージョンがないか確認します。最新バージョンが見つかればコンソールでお知らせします。<br />
+<p>最短で1週間ごとにGitHubのAPIと通信し、新しいバージョンがないか確認します。最新バージョンが見つかればコンソールでお知らせします。<br />
 この機能はconfig.txtで無効化できます。</p>
 <pre><code>check-update = False
 </code></pre>
