@@ -18,7 +18,7 @@
 
 # 「ニコニコ素材リストアップツール ライブラリ」by @is_ptcm
 # メインスクリプトと関数をまとめたスクリプトを分けることにより可読性の向上を目指す
-VERSION = 'v0.8.1'
+VERSION = 'v0.8.2'
 
 
 # --- パッケージ読み込み
@@ -29,7 +29,6 @@ import json
 import re
 import urllib
 from urllib.request import urlopen
-from bs4 import BeautifulSoup
 
 
 # --- エクスポート用HTMLテンプレの定義
@@ -305,17 +304,17 @@ def checkUpdate():
 	# オンラインでバージョン確認
 	last_version = VERSION
 	try:
-		# html取得
-		html = urlopen('https://textblog.minibird.jp/twitter/').read()
-		soup = BeautifulSoup(html, 'html.parser')
-		# バージョン文字列取得
-		last_version = soup.select_one('#listup-tool-last-version').text
-		last_version = last_version[12:].replace('.zip', '').replace('-', '.')
+		# APIから最終リリースを取得
+		text = urlopen('https://api.github.com/repos/istallia/nico-material-listup/releases/latest').read()
+		data = json.loads(text)
+		# 各データを取得
+		last_version = data['tag_name']
+		download_url = data['assets'][0]['browser_download_url']
 	except:
 		pass
 	# 更新があれば通知
 	if last_version != VERSION:
-		print('\n現在の最新版は' + last_version + 'です。\n')
+		print(f'\n現在の最新版は{last_version}です。\n{download_url}\n')
 	# 最終確認日時を更新
 	with open(file_name, mode='w', encoding='ascii') as f:
 		f.write(str(current_time))
