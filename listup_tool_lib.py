@@ -129,31 +129,46 @@ html_template = '''\
 def getIdList(file_path, use_path):
 	# 下準備
 	print('+ '+os.path.basename(file_path), end='')
-	content = b''
+	content     = b''
+	id_list     = []
+	aup_id_list = []
 	# ファイルを読み込み
 	with open(file_path, mode='rb') as f:
 		content = f.read()
 	if len(content) < 1:
 		print(' -> 空、または読み込み失敗')
 		return []
-	content   = content.replace(b'\x00', b'')
 	root, ext = os.path.splitext(file_path)
 	if ext[1:].lower() == 'aup':
-		# AviUtlでは連続する数字の短縮が行われる
-		for length in range(3,10):
-			for num in range(10):
-				content = re.sub(bytes([0x80+length])+bytes([0x30+num])+b'[\x01-\x79]', b'%d'%(num)*length, content)
+		aup_id_list = getIdListFromAupText(content)
+	content = content.replace(b'\x00', b'_')
 	content = re.sub(b'[\\x80-\\xff][^\\x2e]', b'_', content)
+	# AviUtlでは連続する数字の短縮が行われる
+	# if ext[1:].lower() == 'aup':
+	# 	for length in range(3,10):
+	# 		for num in range(10):
+	# 			content = re.sub(bytes([0x80+length])+bytes([0x30+num])+b'[\x01-\x79]', b'%d'%(num)*length, content)
 	# 抽出する (ファイルパス)
 	if use_path:
 		path_list = re.findall(b'(?:\\w:)?(?:[\\\\/]{1,2}[^\\/\\\\:\\*\\?<>|\\n\\t\\x01-\\x1f]{1,127})+\\.[a-zA-Z0-9][-\\w]{1,10}[a-zA-Z0-9]', content)
 		content   = b'\n'.join(path_list)
 	# 抽出する (ID直接検索)
 	id_list = re.findall(b'(?:[^a-zA-Z0-9]|^)((nc|im|sm|td)\\d{2,12})(?=[^a-zA-Z0-9]|$)', content)
-	id_list = list(set(id_list))
 	for i in range(len(id_list)):
 		id_list[i] = id_list[i][0].decode('utf-8')
+	if len(aup_id_list) > 0:
+		id_list.extend(aup_id_list)
+	id_list = list(set(id_list))
 	print(' -> '+str(len(id_list))+'件のIDを抽出')
+	return id_list
+
+
+# --- aupファイルのテキストからIDを抽出
+def getIdListFromAupText(content):
+	# UTF-16文字列として入っているIDを抜き出す
+	id_list = re.findall(b'n\\x00c\\x00(?:\\d[\\x00\\x80]){2,12}', content);
+	for i in range(0, len(id_list)):
+		id_list[i] = id_list[i].replace(b'\x00', b'').replace(b'\x80', b'').decode('utf-8')
 	return id_list
 
 
