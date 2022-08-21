@@ -18,7 +18,7 @@
 
 # 「ニコニコ素材リストアップツール ライブラリ」by @is_ptcm
 # メインスクリプトと関数をまとめたスクリプトを分けることにより可読性の向上を目指す
-VERSION = 'v0.8.3rc1'
+VERSION = 'v0.8.3rc2'
 
 
 # --- パッケージ読み込み
@@ -166,7 +166,7 @@ def getIdList(file_path, use_path):
 # --- aupファイルのテキストからIDを抽出
 def getIdListFromAupText(content):
 	# UTF-16文字列として入っているIDを抜き出す
-	id_list = re.findall(b'n\\x00c\\x00(?:\\d[\\x00\\x80]){2,12}', content);
+	id_list = re.findall(b'(?:s\\x00m\\x00|i\\x00m\\x00|n\\x00c\\x00|t\\x00d\\x00)(?:\\d[\\x00\\x80]){2,12}', content);
 	for i in range(0, len(id_list)):
 		id_list[i] = id_list[i].replace(b'\x00', b'').replace(b'\x80', b'').decode('utf-8')
 	return id_list
