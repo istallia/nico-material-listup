@@ -1,6 +1,6 @@
 @echo off
 chcp 932
-rem ニコニコ素材リストアップツール(v0.7)をレジストリに登録するバッチファイル
+rem ニコニコ素材リストアップツール(v0.8)をレジストリに登録するバッチファイル
 
 setlocal
 set APP_PATH=%~dp0listup_tool.exe

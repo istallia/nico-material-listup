@@ -18,7 +18,7 @@
 
 # 「ニコニコ素材リストアップツール ライブラリ」by @is_ptcm
 # メインスクリプトと関数をまとめたスクリプトを分けることにより可読性の向上を目指す
-VERSION = 'v0.8.3rc2'
+VERSION = 'v0.8.3'
 
 
 # --- パッケージ読み込み
@@ -252,7 +252,7 @@ def fetchMaterialInfo(id):
 	work_text = ''
 	work_info = []
 	try:
-		work_text = urlopen(f'https://public-api.commons.nicovideo.jp/v1/tree/node/{id}?with_meta=1').read()
+		work_text = urlopen(f'https://public-api.commons.nicovideo.jp/v1/works/{id}?with_meta=1').read()
 		work_info = json.loads(work_text)
 	except (json.decoder.JSONDecodeError, urllib.error.URLError):
 		print(' -> 作品情報の取得に失敗')
