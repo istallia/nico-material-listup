@@ -23,6 +23,8 @@ jobs:
         pytest -v > pytest-results.txt
     - name: 結果の出力
       run: |
-        echo "::set-output name=results::\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "### テスト結果" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         cat pytest-results.txt >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
