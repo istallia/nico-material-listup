@@ -1,0 +1,27 @@
+name: scheduled-test
+
+on:
+  schedule:
+    - cron: "0 9 * * 3,6"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Pythonのセットアップ
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11.0"
+    - name: pytestのインストール
+      run: |
+        python -m pip install pytest
+    - name: テストの実行
+      run: | 
+        pytest -v > pytest-results.txt
+    - name: 結果の出力
+      run: |
+        echo "::set-output name=results::\`\`\`" >> $GITHUB_STEP_SUMMARY
+        cat pytest-results.txt >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
