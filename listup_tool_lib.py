@@ -1,7 +1,7 @@
 #!python3
 #-*- coding: utf-8 -*-
 
-# Copyright (C) 2020-2022 istallia
+# Copyright (C) 2020-2023 istallia
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
